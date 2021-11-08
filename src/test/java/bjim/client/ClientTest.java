@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class ClientTest {
 
-    private static final int WAIT_SECS = 100;
+    private static final int WAIT_SECS = 500;
 
     final ServerChatWindow serverChatWindow = mock(ServerChatWindow.class);
     final ClientChatWindow clientChatWindow = mock(ClientChatWindow.class);
@@ -81,7 +81,6 @@ public class ClientTest {
 
         // given
         client.startRunning();
-        Thread.sleep(WAIT_SECS);
         Thread.sleep(WAIT_SECS);
 
         // when
