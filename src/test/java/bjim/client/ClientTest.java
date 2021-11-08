@@ -82,12 +82,12 @@ public class ClientTest {
         // given
         client.startRunning();
         Thread.sleep(WAIT_SECS);
+        Thread.sleep(WAIT_SECS);
 
         // when
         client.sendMessage("hi");
 
         // then
-        Thread.sleep(WAIT_SECS);
         assertEquals("Client:\n  hi", server.getLastReceivedMessage());
 
         // after
