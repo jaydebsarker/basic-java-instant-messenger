@@ -202,7 +202,7 @@ public class ServerTest {
         server.startRunning();
 
         //then
-        Thread.sleep(1000);
+        Thread.sleep(4000);
         assertEquals("Waiting for clients to connect! ", server.getmessage());
                 //after
                 server.stopRunning();
