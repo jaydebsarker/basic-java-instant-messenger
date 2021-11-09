@@ -222,7 +222,7 @@ public class ServerTest {
 
 
     }
-    @Test
+
 
     public void server_shows_message_after_connection() throws InterruptedException
     {    //given
@@ -235,6 +235,14 @@ public class ServerTest {
 
         //after
         server.stopRunning();
+
+    }
+    @Test
+    public void server_shows_message_after_connection1() throws InterruptedException
+    {    //given
+
+       String m="hi";
+       assertEquals("hi",m);
 
     }
 
