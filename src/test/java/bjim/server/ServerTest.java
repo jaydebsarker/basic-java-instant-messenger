@@ -194,7 +194,7 @@ public class ServerTest {
 
     }
 
-  
+
 
 
     @Test
@@ -222,6 +222,21 @@ public class ServerTest {
 
 
     }
+
+    public void server_shows_message_after_connection() throws InterruptedException
+    {    //given
+
+        server.startRunning();
+
+        //then
+        String actual =  server.getmessage();
+        assertTrue("Waiting for clients to connect!".equals(actual));
+
+        //after
+        server.stopRunning();
+
+    }
+
 
 
 
