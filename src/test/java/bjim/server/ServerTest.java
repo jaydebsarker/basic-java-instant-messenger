@@ -203,7 +203,7 @@ public class ServerTest {
 
         //then
         Thread.sleep(4000);
-        assertEquals(null, server.getmessage());
+        assertEquals("hi", server.getmessage());
                 //after
                 server.stopRunning();
 
