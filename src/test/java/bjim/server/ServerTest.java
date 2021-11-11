@@ -54,7 +54,7 @@ public class ServerTest {
         server.stopRunning();
 
         // then
-        Thread.sleep(WAIT_SECS);
+        Thread.sleep(5000);
         assertFalse(server.isRunning());
     }
 

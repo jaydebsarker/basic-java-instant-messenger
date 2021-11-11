@@ -129,7 +129,7 @@ public class Server {
         if (serverSocket == null) {
             return false;
         }
-        return true;
+        return !serverSocket.isClosed();
     }
 
     public void setDefaultCloseOperation(int exitOnClose) {
