@@ -1,9 +1,12 @@
-language: java
-
-jdk: openjdk15
-
-os: linux
-
-script:
-    - java --version
-    - mvn clean test
+{
+    "language": "java",
+    "os": [
+            "windows"
+    ],
+    "jdk": [
+            "openjdk15"
+    ],
+    "script": [
+            "java --version",
+            
+    ]
