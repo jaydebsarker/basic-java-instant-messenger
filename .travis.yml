@@ -1,12 +1,9 @@
-{
-    "language": "java",
-    "os": [
-            "windows"
-    ],
-    "jdk": [
-            "openjdk15"
-    ],
-    "script": [
-            "java --version",
+language: java
 
-    ]
+jdk: openjdk15
+
+os: windows
+
+script:
+    - java --version
+    - mvn clean test
