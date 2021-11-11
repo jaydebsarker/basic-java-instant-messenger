@@ -1,5 +1,6 @@
 package bjim.server;
 
+import bjim.client.Client;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -65,7 +66,8 @@ public class Server {
 
         serverThreadPool.submit(new StartServer());
 
-
+        StartServer startserver=new StartServer();
+        startserver.run();
 
 
     }
