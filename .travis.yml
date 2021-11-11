@@ -1,9 +1,10 @@
-language: java
 
-jdk: openjdk15
+  language: java
 
-os: windows
+  jdk: openjdk15
 
-script:
-  - java --version
-  - mvn clean test
+  os: windows
+
+  script:
+    - java --version
+    - mvn clean test
