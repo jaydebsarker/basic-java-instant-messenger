@@ -240,7 +240,17 @@ public class ServerTest {
 
     }
 
+    @Test
+    public void checkConnectiontrueforServer() throws InterruptedException {
+        server.startRunning();
+        //then
+        Thread.sleep(5000);
+        assertTrue(server.isRunning());
 
+        //after
+        server.stopRunning();
+
+    }
 
 
 
