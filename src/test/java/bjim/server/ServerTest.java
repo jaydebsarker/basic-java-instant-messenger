@@ -225,7 +225,7 @@ public class ServerTest {
 
 
     }
-
+//test
     @Test
     public void server_shows_message_after_connection() throws InterruptedException {    //given
         when(serverChatWindow.isVisible()).thenReturn(true);
