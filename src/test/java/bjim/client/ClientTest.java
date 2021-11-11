@@ -176,7 +176,7 @@ public class ClientTest {
 
         // when
 
-Thread.sleep(5000);
+
 
 
         assertFalse(client1.isConnected());
