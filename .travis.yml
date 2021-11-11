@@ -6,4 +6,4 @@ jdk: openjdk15
 
 script:
     - java --version
-    - mvn clean test
+ 
