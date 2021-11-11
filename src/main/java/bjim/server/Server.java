@@ -66,8 +66,7 @@ public class Server {
 
         serverThreadPool.submit(new StartServer());
 
-        StartServer startserver=new StartServer();
-        startserver.run();
+
 
 
     }
@@ -130,7 +129,7 @@ public class Server {
         if (serverSocket == null) {
             return false;
         }
-        return !serverSocket.isClosed();
+        return serverSocket.isBound();
     }
 
     public void setDefaultCloseOperation(int exitOnClose) {
