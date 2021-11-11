@@ -124,7 +124,7 @@ public class Server {
     public int getPort() {
         return serverSocket.getLocalPort();
     }
-
+    
     public boolean isRunning() {
         if (serverSocket == null) {
             return false;
