@@ -1,89 +1,199 @@
 package bjim.client;
 
-import bjim.server.Server;
-import org.junit.Assert;
-import org.junit.Test;
-
 import static bjim.client.Client.LOCAL_HOST;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import bjim.server.Server;
+import bjim.server.ServerChatWindow;
+import java.io.IOException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ClientTest {
 
-	@Test
-	public void isClientConnected() throws InterruptedException {
+    private static final int WAIT_SECS = 1000;
 
-		// given
-		Server server = new Server();
-		Client client = new Client();
-		server.startRunning();
-		Thread.sleep(1000);
-		client.startRunning();
-		Thread.sleep(1000);
+    final ServerChatWindow serverChatWindow = mock(ServerChatWindow.class);
+    final ClientChatWindow clientChatWindow = mock(ClientChatWindow.class);
 
-		// when
-		boolean clientConnected = server.isClientConnected();
+    private Server server;
+    private Client client;
 
-		// then
-		Assert.assertTrue(clientConnected);
+    @Before
+    public void setUp() throws InterruptedException {
+        server = new Server(serverChatWindow);
+        server.startRunning();
+        Thread.sleep(WAIT_SECS);
+        client = new Client(clientChatWindow);
+        when(clientChatWindow.getUsername()).thenReturn("Client");
+        when(serverChatWindow.getUsername()).thenReturn("Server");
+    }
 
-		// after
-		server.stopServer();
-		client.stopClient();
-	}
+    @After
+    public void tearDown() throws InterruptedException {
+        server.stopRunning();
+        Thread.sleep(WAIT_SECS);
+    }
 
-	@Test
-	public void serverIPIsLocalHostByDefault() {
+    @Test
+    public void numberOfConnectedClientsIsOne() throws InterruptedException {
 
-		// given
-		Client client = new Client();
+        // given
+        client.startRunning();
+        Thread.sleep(WAIT_SECS);
 
-		// whe
-		String serverIP = client.getServerIP();
+        // when...then
+        assertEquals(1, server.numberOfClientsConnected());
 
-		Assert.assertEquals(LOCAL_HOST, serverIP);
-	}
+        // after
+        client.stopRunning();
+    }
 
-	@Test
-	public void windowIsVisibleDuringStartTheClient() throws InterruptedException
-	{
+    @Test
+    public void serverIPIsLocalHostByDefault() {
 
-		// given
-		Server server = new Server();
-		Client client = new Client("127.0.0.1");
-		server.startRunning();
-		Thread.sleep(1000);
-		client.startRunning();
-		Thread.sleep(1000);
+        // when
+        String serverIP = client.getServerIP();
 
-		assertTrue(client.isWindowVisibleClientSide());
+        // then
+        assertEquals(LOCAL_HOST, serverIP);
+    }
 
-		// after
-		client.stopClient();
-		server.stopServer();
-	}
+    @Test
+    public void windowIsVisibleDuringStartTheClient() throws InterruptedException {
 
+        // given
+        when(clientChatWindow.isVisible()).thenReturn(true);
+        client.startRunning();
+        Thread.sleep(WAIT_SECS);
 
-	@Test
-	public void clientSendsAMessageAndServerReceivesIt() throws InterruptedException {
+        // when...then
+        assertTrue(client.isWindowVisibleClientSide());
 
-		// given
-		Server server = new Server();
-		Client client = new Client("127.0.0.1");
-		server.startRunning();
-		Thread.sleep(1000);
-		client.startRunning();
-		Thread.sleep(1000);
+        // after
+        client.stopRunning();
+    }
 
-		//when
-		client.sendMessage("hi");
+    @Test
+    public void clientSendsAMessageAndServerReceivesIt() throws InterruptedException {
 
-		// then
-		Thread.sleep(500);
-		assertEquals("USER - hi", server.getLastReceivedMessage());
+        // given
+        client.startRunning();
+        Thread.sleep(WAIT_SECS);
 
-		//after
-		client.stopClient();
-		server.stopServer();
-	}
+        // when
+        client.sendMessage("hi");
+        Thread.sleep(WAIT_SECS);
+
+        // then
+        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+
+        // after
+        client.stopRunning();
+    }
+
+    @Test
+    public void multipleClientsConnected() throws InterruptedException {
+
+        // given
+        Client client1 = new Client(clientChatWindow);
+        Client client2 = new Client(clientChatWindow);
+
+        // when
+        client1.startRunning();
+        client2.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        // then
+        assertTrue(client1.isConnected());
+        assertTrue(client2.isConnected());
+
+        // after
+        client1.stopRunning();
+        client2.stopRunning();
+    }
+
+    @Test
+    public void twoClientsSendMessagesToServer() throws InterruptedException {
+
+        // given
+        Client client1 = new Client(clientChatWindow);
+        Client client2 = new Client(clientChatWindow);
+
+        client1.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        client2.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        // when...then
+        client1.sendMessage("hi");
+        Thread.sleep(WAIT_SECS);
+        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+
+        client2.sendMessage("hello");
+        Thread.sleep(WAIT_SECS);
+        assertEquals("Client:\n  hello", server.getLastReceivedMessage());
+
+        // after
+        client1.stopRunning();
+        client2.stopRunning();
+    }
+
+    @Test
+    public void serverSendsMessagesToTwoClients() throws InterruptedException {
+
+        // given
+        Client client1 = new Client(clientChatWindow);
+        Client client2 = new Client(clientChatWindow);
+        client1.startRunning();
+        client2.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        // when
+        server.sendMessage("hi");
+
+        // then
+        Thread.sleep(WAIT_SECS);
+        assertEquals("Server:\n  hi", client1.getLastReceivedMessage());
+        assertEquals("Server:\n  hi", client2.getLastReceivedMessage());
+
+        // after
+        client1.stopRunning();
+        client2.stopRunning();
+    }
+
+    @Test
+    public void ClientAppDoNotGetConnectionIfServerAppDonotStarts()
+            throws InterruptedException, IOException {
+
+        // given
+        Client client1 = new Client(clientChatWindow);
+        client1.startRunning1();
+
+        // when
+
+        assertFalse(client1.isConnected());
+
+        // after
+        client1.stopRunning();
+    }
+
+    @Test
+    public void CLientCanBeAbleToTypeIfClientGetConnectionToServer()
+            throws InterruptedException, IOException {
+        // given
+        Client client1 = new Client(clientChatWindow);
+        client1.startRunning1();
+
+        // when
+
+        assertFalse(client1.checktypingstatus());
+
+        // after
+        client1.stopRunning();
+    }
 }
