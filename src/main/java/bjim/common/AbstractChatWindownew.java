@@ -1,6 +1,5 @@
 package bjim.common;
 
-import static java.awt.BorderLayout.NORTH;
 import static java.awt.Font.BOLD;
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -10,10 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-
-
 import lombok.Getter;
 
 public class AbstractChatWindownew {
@@ -23,43 +19,33 @@ public class AbstractChatWindownew {
     private static final int WINDOW_HEIGHT = 300;
     private static final String FONT_NAME = "Segoe Script";
 
- public JFrame chatWindow;
-   public JTextField userInput;
-public JTextArea chatText;
+    public JFrame chatWindow;
+    public JTextField userInput;
+    public JTextArea chatText;
     public JLabel status;
 
-
-
-
-
- 
     JTextField usernameChooser;
     JFrame preFrame;
     private Label l1 = new Label("Welcome to ");
     private Label l2 = new Label("Blondie Bytes");
-   //public  String username;
+    // public  String username;
 
-   
     private JPanel contentPane;
 
     private JTextPane txtDisplayMessage;
     private JButton btnSendFile;
     private JLabel lblReceive;
-    private AbstractChatWindownew  frame = this;
+    private AbstractChatWindownew frame = this;
     private JProgressBar progressBar;
     JButton btnSend;
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    @Getter public  String username;
+    @Getter public String username;
 
     public AbstractChatWindownew(String username) {
 
-
-
-this.username=username;
-
-
+        this.username = username;
 
         preFrame = new JFrame("Choose your username!(Colt chat v0.1");
         preFrame.setBounds(450, 190, 1014, 597);
@@ -67,7 +53,6 @@ this.username=username;
 
         JLabel chooseUsernameLabel = new JLabel("Pick a username:");
         JButton enterServer = new JButton("Enter Chat Server");
-
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,8 +69,7 @@ this.username=username;
         lblName.setBounds(58, 152, 99, 43);
         contentPane.add(lblName);
 
-
-        usernameChooser= new JTextField();
+        usernameChooser = new JTextField();
         usernameChooser.setFont(new Font("Tahoma", Font.PLAIN, 32));
         usernameChooser.setBounds(214, 151, 228, 50);
         contentPane.add(usernameChooser);
@@ -96,57 +80,32 @@ this.username=username;
         contentPane.add(enterServer);
 
         enterServer.addActionListener(new AbstractChatWindownew.enterServerButtonListener());
-        //preFrame.setVisible(true);
+        // preFrame.setVisible(true);
 
+        // these are salehs code
 
+        // chatWindow = new JFrame(username);
+        // chatWindow.setLayout(new BorderLayout());
 
+        // userInput = new JTextField();
+        // chatWindow.add(userInput, NORTH);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//these are salehs code
-
-
-
-
-       // chatWindow = new JFrame(username);
-        //chatWindow.setLayout(new BorderLayout());
-
-        //userInput = new JTextField();
-        //chatWindow.add(userInput, NORTH);
-
-       // JPanel statusPanel = new JPanel();
-       // statusPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, 25));
-        //statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        // JPanel statusPanel = new JPanel();
+        // statusPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, 25));
+        // statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         status = new JLabel("");
-        //statusPanel.add(status);
+        // statusPanel.add(status);
 
-        //chatWindow.add(statusPanel, BorderLayout.SOUTH);
+        // chatWindow.add(statusPanel, BorderLayout.SOUTH);
 
-        //chatText = createChatText();
-       // JScrollPane comp = new JScrollPane(chatText);
-        //comp.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-       // comp.setEnabled(false);
-     //   chatWindow.add(comp, status.getY() + status.getSize().height);
+        // chatText = createChatText();
+        // JScrollPane comp = new JScrollPane(chatText);
+        // comp.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        // comp.setEnabled(false);
+        //   chatWindow.add(comp, status.getY() + status.getSize().height);
 
-        //chatWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-       // chatWindow.setVisible(true);
-
+        // chatWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        // chatWindow.setVisible(true);
 
         chatWindow = new JFrame(username);
         chatWindow.setResizable(false);
@@ -156,7 +115,6 @@ this.username=username;
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         chatWindow.setContentPane(contentPane);
         contentPane.setLayout(null);
-
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.LIGHT_GRAY);
@@ -170,18 +128,18 @@ this.username=username;
         panel.add(lblNewLabel);
 
         JPanel panel_6 = new JPanel();
-        //txtDisplayMessage = new JTextPane();
+        // txtDisplayMessage = new JTextPane();
         // txtDisplayMessage.setEditable(false);
         // txtDisplayMessage.setContentType("text/html");
-        //txtDisplayMessage.setBackground(Color.BLACK);
+        // txtDisplayMessage.setBackground(Color.BLACK);
         // txtDisplayMessage.setForeground(Color.WHITE);
         // txtDisplayMessage.setFont(new Font("Courier New", Font.PLAIN, 18));
         Font font = new Font(FONT_NAME, BOLD, FONT_SIZE);
         chatText = new JTextArea();
         chatText.setEditable(false);
-        //chatText.setContentType("text/html");
-       // chatText.setBackground(Color.WHITE);
-        //chatText.setForeground(Color.WHITE);
+        // chatText.setContentType("text/html");
+        // chatText.setBackground(Color.WHITE);
+        // chatText.setForeground(Color.WHITE);
         chatText.setFont(font);
 
         panel_6.setBounds(0, 66, 562, 323);
@@ -196,14 +154,12 @@ this.username=username;
         contentPane.add(panel_2);
         panel_2.setLayout(null);
 
-
         ImageIcon image3 = new ImageIcon("C:/image/crying.png");
         JButton btnNewButton_2 = new JButton(image3);
         btnNewButton_2.setBounds(31, 22, 44, 41);
         btnNewButton_2.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_2.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
-
 
         ImageIcon image4 = new ImageIcon("C:/image/heart_eye.png");
         JButton btnNewButton_4 = new JButton(image4);
@@ -220,16 +176,12 @@ this.username=username;
         btnNewButton_5.setContentAreaFilled(false);
         panel_2.add(btnNewButton_5);
 
-
         ImageIcon image6 = new ImageIcon("C:/image/crying.png");
         JButton btnNewButton_6 = new JButton(image6);
         btnNewButton_6.setBounds(31 * 4, 22, 44, 41);
         btnNewButton_6.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_6.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
-
-
-
 
         ImageIcon image7 = new ImageIcon("C:/image/scared.png");
         JButton btnNewButton_7 = new JButton(image7);
@@ -247,7 +199,6 @@ this.username=username;
         panel_3.setBounds(0, 446, 562, 73);
         contentPane.add(panel_3);
         panel_3.setLayout(null);
-
 
         ImageIcon image8 = new ImageIcon("C:/image/send.png");
         btnSend = new JButton(image8);
@@ -269,53 +220,37 @@ this.username=username;
         panel_3.add(userInput);
         userInput.setColumns(10);
 
-
-
-
-
-
-
-
-
-        //chatWindow.setVisible(false);
-        if(username=="Client")
-        {preFrame.setVisible(true);
+        // chatWindow.setVisible(false);
+        if (username == "Client") {
+            preFrame.setVisible(true);
             chatWindow.setVisible(false);
-        }
-        else
-        {
+        } else {
             preFrame.setVisible(false);
             chatWindow.setVisible(true);
         }
-
-
     }
-
 
     class enterServerButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             username = usernameChooser.getText();
-            if (username.length() < 1) {System.out.println("No!"); }
-            else {
+            if (username.length() < 1) {
+                System.out.println("No!");
+            } else {
                 preFrame.setVisible(false);
                 chatWindow.setVisible(true);
-
             }
         }
-
     }
 
-    public void chatbox()
-    {
-       chatWindow = new JFrame(username);
-       chatWindow.setResizable(false);
-       chatWindow.setTitle("Chat Frame");
-       chatWindow.setBounds(100, 100, 576, 595);
+    public void chatbox() {
+        chatWindow = new JFrame(username);
+        chatWindow.setResizable(false);
+        chatWindow.setTitle("Chat Frame");
+        chatWindow.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-       chatWindow.setContentPane(contentPane);
+        chatWindow.setContentPane(contentPane);
         contentPane.setLayout(null);
-
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.LIGHT_GRAY);
@@ -329,16 +264,16 @@ this.username=username;
         panel.add(lblNewLabel);
 
         JPanel panel_6 = new JPanel();
-        //txtDisplayMessage = new JTextPane();
-       // txtDisplayMessage.setEditable(false);
+        // txtDisplayMessage = new JTextPane();
+        // txtDisplayMessage.setEditable(false);
         // txtDisplayMessage.setContentType("text/html");
-        //txtDisplayMessage.setBackground(Color.BLACK);
-       // txtDisplayMessage.setForeground(Color.WHITE);
-       // txtDisplayMessage.setFont(new Font("Courier New", Font.PLAIN, 18));
+        // txtDisplayMessage.setBackground(Color.BLACK);
+        // txtDisplayMessage.setForeground(Color.WHITE);
+        // txtDisplayMessage.setFont(new Font("Courier New", Font.PLAIN, 18));
         Font font = new Font(FONT_NAME, BOLD, FONT_SIZE);
         chatText = new JTextArea();
         chatText.setEditable(false);
-        //chatText.setContentType("text/html");
+        // chatText.setContentType("text/html");
         chatText.setBackground(Color.WHITE);
         chatText.setForeground(Color.WHITE);
         chatText.setFont(font);
@@ -355,14 +290,12 @@ this.username=username;
         contentPane.add(panel_2);
         panel_2.setLayout(null);
 
-
         ImageIcon image3 = new ImageIcon("C:/image/crying.png");
         JButton btnNewButton_2 = new JButton(image3);
         btnNewButton_2.setBounds(31, 22, 44, 41);
         btnNewButton_2.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_2.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
-
 
         ImageIcon image4 = new ImageIcon("C:/image/heart_eye.png");
         JButton btnNewButton_4 = new JButton(image4);
@@ -379,16 +312,12 @@ this.username=username;
         btnNewButton_5.setContentAreaFilled(false);
         panel_2.add(btnNewButton_5);
 
-
         ImageIcon image6 = new ImageIcon("C:/image/crying.png");
         JButton btnNewButton_6 = new JButton(image6);
         btnNewButton_6.setBounds(31 * 4, 22, 44, 41);
         btnNewButton_6.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_6.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
-
-
-
 
         ImageIcon image7 = new ImageIcon("C:/image/scared.png");
         JButton btnNewButton_7 = new JButton(image7);
@@ -406,7 +335,6 @@ this.username=username;
         panel_3.setBounds(0, 446, 562, 73);
         contentPane.add(panel_3);
         panel_3.setLayout(null);
-
 
         ImageIcon image8 = new ImageIcon("C:/image/send.png");
         btnSend = new JButton(image8);
@@ -428,27 +356,8 @@ this.username=username;
         panel_3.add(userInput);
         userInput.setColumns(10);
 
-
-
-
-
-
-
-
-
-       chatWindow.setVisible(true);
-
+        chatWindow.setVisible(true);
     }
-
-
-
-
-
-
-
-
-
-
 
     private JTextArea createChatText() {
         JTextArea textArea = new JTextArea();
@@ -460,9 +369,7 @@ this.username=username;
 
     public void setStatus(String statusText) {
         status.setText(statusText);
-
     }
-
 
     public void onSend(ActionListener actionListener) {
         userInput.addActionListener(

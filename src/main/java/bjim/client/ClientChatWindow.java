@@ -11,6 +11,4 @@ public class ClientChatWindow extends AbstractChatWindow {
     public ClientChatWindow(String username) {
         super(username);
     }
-
-
 }

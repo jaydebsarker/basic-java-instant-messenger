@@ -20,7 +20,7 @@ public class AbstractChatWindow {
     protected final JFrame chatWindow;
     protected final JTextField userInput;
     protected final JTextArea chatText;
-   public JLabel status;
+    public JLabel status;
 
     @Getter private final String username;
 
@@ -62,9 +62,7 @@ public class AbstractChatWindow {
 
     public void setStatus(String statusText) {
         status.setText(statusText);
-
     }
-
 
     public void onSend(ActionListener actionListener) {
         userInput.addActionListener(

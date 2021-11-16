@@ -15,17 +15,14 @@ public class ServerChatWindow extends AbstractChatWindow {
     public boolean isUserMessageVisible() {
         return userInput.isVisible();
     }
+
     public boolean isabletowrite() {
         return userInput.isVisible();
     }
+
     public boolean abletowrite() {
         userInput.setEditable(false);
-        if(userInput.isEditable()==true)
-            return true;
+        if (userInput.isEditable() == true) return true;
         else return false;
     }
-
-
-
-
 }

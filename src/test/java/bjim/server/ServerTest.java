@@ -1,21 +1,16 @@
 package bjim.server;
 
 import static bjim.server.Server.DEFAULT_PORT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import bjim.client.Client;
 import bjim.client.ClientChatWindow;
+import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-
 
 public class ServerTest {
 
@@ -36,8 +31,9 @@ public class ServerTest {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws InterruptedException {
         server.stopRunning();
+        Thread.sleep(WAIT_SECS);
     }
 
     @Test
@@ -94,13 +90,7 @@ public class ServerTest {
 
         // then
         assertEquals(0, server.numberOfClientsConnected());
-
-        // after
-        server.stopRunning();
     }
-   
-    
-    
 
     @Test
     public void serverSendsAMessageAndClientReceivesIt() throws InterruptedException {
@@ -120,7 +110,6 @@ public class ServerTest {
         assertEquals("Server:\n  hi", client.getLastReceivedMessage());
 
         // after
-        server.stopRunning();
         client.stopRunning();
     }
 
@@ -132,9 +121,6 @@ public class ServerTest {
 
         // then
         assertEquals(true, server.isServerMessageVisible());
-
-        // after
-        server.stopRunning();
     }
 
     @Test
@@ -145,11 +131,7 @@ public class ServerTest {
 
         // then
         assertEquals(true, server.isWindowVisible());
-
-        // after
-        server.stopRunning();
     }
-
 
     @Test
     public void server_accept_client_request_to_connect() throws InterruptedException, IOException {
@@ -159,92 +141,40 @@ public class ServerTest {
         when(serverChatWindow.isVisible()).thenReturn(true);
         when(clientChatWindow.isVisible()).thenReturn(true);
 
-
         // then
-
         assertTrue(server.serversocketcondition());
-        // after
-        server.stopRunning();
     }
 
-
-
-
-
-
     @Test
-    public void ServerCannotWriteIfClientIsNotConnected() throws InterruptedException
-    {
+    public void ServerCannotWriteIfClientIsNotConnected() {
 
         // given
-
         when(serverChatWindow.isVisible()).thenReturn(true);
 
-        // when
-
-        //then
-
+        // then
         assertFalse(server.abletowrite());
-
-
-
-        // after
-
-        server.stopRunning();
-
-
-
-
     }
-//just a comment
-
-
 
     @Test
-    public void ServerCannotWriteIfServerappStartsAfterClientappStarts() throws InterruptedException {
+    public void ServerCannotWriteIfServerappStartsAfterClientappStarts() {
 
         // given
         when(clientChatWindow.isVisible()).thenReturn(true);
         when(serverChatWindow.isVisible()).thenReturn(true);
 
-
-
-//then
-
+        // then
         assertFalse(server.abletowrite());
-
-
-        // after
-
-        server.stopRunning();
-
-
-
-
-
-
-
     }
-//test
+
+    // test
     @Test
-    public void server_shows_message_after_connection() throws InterruptedException {    //given
+    public void server_shows_message_after_connection() throws InterruptedException { // given
+
         when(serverChatWindow.isVisible()).thenReturn(true);
-        server.startRunning();
 
-        //then
+        // then
         Thread.sleep(5000);
-        String actual =  server.getmessage();
-        assertEquals("Waiting for clients to connect!",actual);
-        //after
-        server.stopRunning();
-
+        String actual = server.getmessage();
+        assertEquals("Waiting for clients to connect!", actual);
     }
-
-
-
-
-
-
-
-
 }

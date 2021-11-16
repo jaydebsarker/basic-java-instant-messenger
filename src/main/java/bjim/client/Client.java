@@ -18,14 +18,13 @@ public class Client {
     private final ClientChatWindow chatWindow;
     private final String serverIP;
     private final int serverPort = SERVER_PORT; // todo: allow setting in constructor
-      int checkstatus;
+    int checkstatus;
     private Connection connection;
 
     private String lastReceivedMessage = "";
     private ObjectOutputStream output;
     private ObjectInputStream input;
-     boolean type;
-
+    boolean type;
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -60,16 +59,13 @@ public class Client {
     }
 
     public boolean checktypingstatus() throws IOException {
-       return type;
-
+        return type;
     }
-
 
     public void startRunning1() {
 
         executorService.submit(new StartClient1());
     }
-
 
     public void startRunning() {
 
@@ -124,17 +120,13 @@ public class Client {
         return connection != null && connection.isConnected();
     }
 
-
-
-
-
     private class StartClient1 implements Runnable {
 
         @Override
         public void run() {
             try {
                 connectToServer();
-                 setupStreams();
+                setupStreams();
                 whileChatting();
             } catch (IOException eofException) {
                 setStatus(CONNECTION_CLOSED);
@@ -148,12 +140,12 @@ public class Client {
             connection = new Connection(new Socket(InetAddress.getByName(serverIP), serverPort));
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
+
         private void setupStreams() throws IOException {
             output = new ObjectOutputStream(connection.getSocket().getOutputStream());
             output.flush();
             input = new ObjectInputStream(connection.getSocket().getInputStream());
             showMessage("\nStreams are now good to go!");
-
         }
 
         private void whileChatting() throws IOException {
@@ -183,34 +175,13 @@ public class Client {
 
         private void ableToType(final boolean tof) {
             chatWindow.ableToType(tof);
-            type=tof;
+            type = tof;
         }
 
         private void setStatus(String text) {
             chatWindow.setStatus(text);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private class StartClient implements Runnable {
 
@@ -232,12 +203,12 @@ public class Client {
             connection = new Connection(new Socket(InetAddress.getByName(serverIP), serverPort));
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
+
         private void setupStreams() throws IOException {
             output = new ObjectOutputStream(connection.getOutput());
             output.flush();
             input = new ObjectInputStream(connection.getInput());
             showMessage("\nStreams are now good to go!");
-
         }
 
         private void whileChatting() throws IOException {

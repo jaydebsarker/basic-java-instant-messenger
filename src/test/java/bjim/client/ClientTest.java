@@ -7,11 +7,10 @@ import static org.mockito.Mockito.when;
 
 import bjim.server.Server;
 import bjim.server.ServerChatWindow;
+import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class ClientTest {
 
@@ -167,62 +166,34 @@ public class ClientTest {
         client2.stopRunning();
     }
 
-
-
-
     @Test
-    public void ClientAppDoNotGetConnectionIfServerAppDonotStarts() throws InterruptedException, IOException {
+    public void ClientAppDoNotGetConnectionIfServerAppDonotStarts()
+            throws InterruptedException, IOException {
 
         // given
         Client client1 = new Client(clientChatWindow);
         client1.startRunning1();
 
-
         // when
-
-
-
 
         assertFalse(client1.isConnected());
 
-
         // after
         client1.stopRunning();
-
-
     }
 
-
     @Test
-    public void CLientCanBeAbleToTypeIfClientGetConnectionToServer() throws InterruptedException, IOException {
+    public void CLientCanBeAbleToTypeIfClientGetConnectionToServer()
+            throws InterruptedException, IOException {
         // given
         Client client1 = new Client(clientChatWindow);
         client1.startRunning1();
 
         // when
 
-
-
-
         assertFalse(client1.checktypingstatus());
-
 
         // after
         client1.stopRunning();
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
 }

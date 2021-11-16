@@ -1,6 +1,5 @@
 package bjim.server;
 
-import bjim.client.Client;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -54,21 +53,20 @@ public class Server {
     public boolean isServerMessageVisible() {
         return chatWindow.isUserMessageVisible();
     }
-    public boolean abletowrite(){return chatWindow.abletowrite();}
 
-    public boolean serversocketcondition(){ return serverSocket.isBound();}
+    public boolean abletowrite() {
+        return chatWindow.abletowrite();
+    }
 
+    public boolean serversocketcondition() {
+        return serverSocket.isBound();
+    }
 
-
-    public void startRunning()  {
+    public void startRunning() {
         final String message;
         chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
 
         serverThreadPool.submit(new StartServer());
-
-
-
-
     }
 
     public synchronized void sendMessage(String message) {
@@ -85,15 +83,14 @@ public class Server {
         }
     }
 
-    public String getmessage()
-    {  System.out.println(getstatus);
-        return getstatus;}
-
-    public void setmessage(String m)
-    {
-        getstatus=m;
+    public String getmessage() {
+        System.out.println(getstatus);
+        return getstatus;
     }
 
+    public void setmessage(String m) {
+        getstatus = m;
+    }
 
     private void sendMessage(String messageToSend, Connection connection) throws IOException {
         connection.getOutput().writeObject(messageToSend);
@@ -111,7 +108,6 @@ public class Server {
             }
         }
     }
-
 
     public synchronized void showMessage(String text) {
         chatWindow.showMessage(text);
@@ -186,7 +182,6 @@ public class Server {
             connections.clear();
         }
 
-
         private void readMessages(Connection connection) {
 
             while (connection != null && connection.getInput() != null) {
@@ -208,8 +203,6 @@ public class Server {
             chatWindow.setStatus(text);
             setmessage(text);
             getmessage();
-
-
         }
 
         private void closeClientConnection(Connection connection) {
@@ -224,9 +217,5 @@ public class Server {
                         "Error while attempting to close client connection: " + e.getMessage());
             }
         }
-
-
-
-
     }
 }
