@@ -15,7 +15,7 @@ public class Client {
 
     private final ClientChatWindow chatWindow;
     private final String serverIP;
-    private final int serverPort = SERVER_PORT; // todo: allow setting in constructor
+    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
     private Connection connection;
 
     private String lastReceivedMessage = "";
