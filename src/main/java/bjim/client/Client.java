@@ -2,8 +2,6 @@ package bjim.client;
 
 import bjim.common.Connection;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -18,28 +16,23 @@ public class Client {
     private final ClientChatWindow chatWindow;
     private final String serverIP;
     private final int serverPort = SERVER_PORT; // todo: allow setting in constructor
-    int checkstatus;
     private Connection connection;
 
     private String lastReceivedMessage = "";
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
     boolean type;
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-    public static Client withUsername(String username) {
-        return new Client(LOCAL_HOST, username);
-    }
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public Client() {
         this(new ClientChatWindow());
     }
 
+    @SuppressWarnings("unused")
     public Client(String serverIP) {
         this(serverIP, new ClientChatWindow());
     }
 
+    @SuppressWarnings("unused")
     public Client(String serverIP, String username) {
         this(serverIP, new ClientChatWindow(username));
     }
@@ -58,7 +51,7 @@ public class Client {
         return chatWindow.isVisible();
     }
 
-    public boolean checktypingstatus() throws IOException {
+    public boolean checkTypingStatus() {
         return type;
     }
 
@@ -141,10 +134,7 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void setupStreams() throws IOException {
-            output = new ObjectOutputStream(connection.getSocket().getOutputStream());
-            output.flush();
-            input = new ObjectInputStream(connection.getSocket().getInputStream());
+        private void setupStreams() {
             showMessage("\nStreams are now good to go!");
         }
 
@@ -202,13 +192,6 @@ public class Client {
             setStatus("Attempting to connect to server @" + serverIP + ":" + serverPort);
             connection = new Connection(new Socket(InetAddress.getByName(serverIP), serverPort));
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
-        }
-
-        private void setupStreams() throws IOException {
-            output = new ObjectOutputStream(connection.getOutput());
-            output.flush();
-            input = new ObjectInputStream(connection.getInput());
-            showMessage("\nStreams are now good to go!");
         }
 
         private void whileChatting() throws IOException {

@@ -63,7 +63,6 @@ public class Server {
     }
 
     public void startRunning() {
-        final String message;
         chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
 
         serverThreadPool.submit(new StartServer());
@@ -151,6 +150,7 @@ public class Server {
                 setStatus("Waiting for clients to connect!");
                 ableToType(true);
 
+                //noinspection InfiniteLoopStatement
                 while (true) {
                     waitForConnection();
                 }

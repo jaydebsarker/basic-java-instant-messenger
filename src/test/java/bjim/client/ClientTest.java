@@ -191,7 +191,7 @@ public class ClientTest {
 
         // when
 
-        assertFalse(client1.checktypingstatus());
+        assertFalse(client1.checkTypingStatus());
 
         // after
         client1.stopRunning();
