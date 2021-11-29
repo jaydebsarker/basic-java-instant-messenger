@@ -104,8 +104,10 @@ public class ClientTest {
         Thread.sleep(WAIT_SECS);
 
       //then
+        String a= client.set_and_get_UserName("Jay");
+        Thread.sleep(WAIT_SECS);
 
-        assertEquals("Jay", client.set_and_get_UserName("Jay"));
+        assertEquals("Jay", a);
         Thread.sleep(WAIT_SECS);
       //after
         client.stopRunning();
