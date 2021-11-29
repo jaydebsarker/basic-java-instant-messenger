@@ -1,5 +1,6 @@
 package bjim.client;
 
+import bjim.common.*;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,6 +26,10 @@ public class Client {
 
     public Client() {
         this(new ClientChatWindow());
+    }
+
+    public Client(String userName, int id) {
+        this(new ClientChatWindow(userName));
     }
 
     @SuppressWarnings("unused")
@@ -79,6 +84,15 @@ public class Client {
                 System.out.println("Failed to stop client...");
             }
         }
+    }
+
+    // using setUserName
+
+    public String set_and_get_UserName(String name) {
+        System.out.println(name);
+        String na = new AbstractChatWindownew(name).username;
+        // new ClientChatWindow(name);
+        return na;
     }
 
     public void sendMessage(String message) {

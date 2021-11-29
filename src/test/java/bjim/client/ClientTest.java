@@ -95,6 +95,21 @@ public class ClientTest {
         client.stopRunning();
     }
 
+    // log in correct
+    @Test
+    public void clientLogInNameIsCorrect() throws InterruptedException {
+        // given
+        Client client = new Client(clientChatWindow);
+        client.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        Thread.sleep(WAIT_SECS);
+
+        assertEquals("Jay", client.set_and_get_UserName("Jay"));
+
+        client.stopRunning();
+    }
+
     @Test
     public void multipleClientsConnected() throws InterruptedException {
 

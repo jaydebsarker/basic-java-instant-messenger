@@ -7,8 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import lombok.Getter;
@@ -43,10 +41,17 @@ public class AbstractChatWindownew {
     // distinct users
     HashMap<String, Integer> map = new HashMap<>();
     int count_user = 1;
-
+    String usernameselect;
     @Getter public String username;
 
+    public AbstractChatWindownew() {}
+
+    public String userNameReturnToClient() {
+        return usernameselect;
+    }
+
     public AbstractChatWindownew(String username) {
+        // System.out.println(username);
 
         this.username = username;
 
@@ -86,15 +91,14 @@ public class AbstractChatWindownew {
 
         status = new JLabel("");
 
-
         chatWindow = new JFrame(username);
         chatWindow.setResizable(false);
 
         chatWindow.setTitle("Chat Fr");
 
-        //chatWindow.setTitle(usernameChooser.getText());
+        // chatWindow.setTitle(usernameChooser.getText());
 
-        //chatWindow.setTitle(username);
+        // chatWindow.setTitle(username);
         chatWindow.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -107,7 +111,9 @@ public class AbstractChatWindownew {
         contentPane.add(panel);
         panel.setLayout(null);
 
-        ImageIcon image2 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/profile.png");
+        ImageIcon image2 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/profile.png");
         JLabel lblNewLabel = new JLabel(image2);
         lblNewLabel.setBounds(20, 0, 66, 67);
         panel.add(lblNewLabel);
@@ -132,21 +138,27 @@ public class AbstractChatWindownew {
         contentPane.add(panel_2);
         panel_2.setLayout(null);
 
-        ImageIcon image3 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
+        ImageIcon image3 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
         JButton btnNewButton_2 = new JButton(image3);
         btnNewButton_2.setBounds(31, 22, 44, 41);
         btnNewButton_2.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_2.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
 
-        ImageIcon image4 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/heart_eye.png");
+        ImageIcon image4 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/heart_eye.png");
         JButton btnNewButton_4 = new JButton(image4);
         btnNewButton_4.setBounds(120, 22, 44, 41);
         btnNewButton_4.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_4.setContentAreaFilled(false);
         panel_2.add(btnNewButton_4);
 
-        ImageIcon image5 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/sad.png");
+        ImageIcon image5 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/sad.png");
         JButton btnNewButton_5 = new JButton(image5);
 
         btnNewButton_5.setBounds(265, 22, 44, 41);
@@ -154,14 +166,18 @@ public class AbstractChatWindownew {
         btnNewButton_5.setContentAreaFilled(false);
         panel_2.add(btnNewButton_5);
 
-        ImageIcon image6 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
+        ImageIcon image6 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
         JButton btnNewButton_6 = new JButton(image6);
         btnNewButton_6.setBounds(31 * 4, 22, 44, 41);
         btnNewButton_6.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_6.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
 
-        ImageIcon image7 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/scared.png");
+        ImageIcon image7 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/scared.png");
         JButton btnNewButton_7 = new JButton(image7);
         btnNewButton_7.setBounds(378, 22, 44, 41);
         btnNewButton_7.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -178,14 +194,18 @@ public class AbstractChatWindownew {
         contentPane.add(panel_3);
         panel_3.setLayout(null);
 
-        ImageIcon image8 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/send.png");
+        ImageIcon image8 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/send.png");
         btnSend = new JButton(image8);
         btnSend.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnSend.setContentAreaFilled(false);
         btnSend.setBounds(498, 5, 64, 64);
         panel_3.add(btnSend);
 
-        ImageIcon image9 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/document.png");
+        ImageIcon image9 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/document.png");
         btnSendFile = new JButton(image9);
         btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnSendFile.setContentAreaFilled(false);
@@ -210,6 +230,7 @@ public class AbstractChatWindownew {
 
     class enterServerButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
+            usernameselect = username;
 
             username = usernameChooser.getText();
 
@@ -236,8 +257,8 @@ public class AbstractChatWindownew {
     public void chatbox() {
         chatWindow = new JFrame(username);
         chatWindow.setResizable(false);
-        chatWindow.setTitle("Chat mmmm");
-       // chatWindow.setTitle(usernameChooser.getText());
+        chatWindow.setTitle("Chat");
+        // chatWindow.setTitle(usernameChooser.getText());
         chatWindow.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -250,7 +271,9 @@ public class AbstractChatWindownew {
         contentPane.add(panel);
         panel.setLayout(null);
 
-        ImageIcon image2 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/profile.png");
+        ImageIcon image2 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/profile.png");
         JLabel lblNewLabel = new JLabel(image2);
         lblNewLabel.setBounds(20, 0, 66, 67);
         panel.add(lblNewLabel);
@@ -277,21 +300,27 @@ public class AbstractChatWindownew {
         contentPane.add(panel_2);
         panel_2.setLayout(null);
 
-        ImageIcon image3 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
+        ImageIcon image3 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
         JButton btnNewButton_2 = new JButton(image3);
         btnNewButton_2.setBounds(31, 22, 44, 41);
         btnNewButton_2.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_2.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
 
-        ImageIcon image4 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/heart_eye.png");
+        ImageIcon image4 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/heart_eye.png");
         JButton btnNewButton_4 = new JButton(image4);
         btnNewButton_4.setBounds(120, 22, 44, 41);
         btnNewButton_4.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_4.setContentAreaFilled(false);
         panel_2.add(btnNewButton_4);
 
-        ImageIcon image5 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/sad.png");
+        ImageIcon image5 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/sad.png");
         JButton btnNewButton_5 = new JButton(image5);
 
         btnNewButton_5.setBounds(265, 22, 44, 41);
@@ -299,14 +328,18 @@ public class AbstractChatWindownew {
         btnNewButton_5.setContentAreaFilled(false);
         panel_2.add(btnNewButton_5);
 
-        ImageIcon image6 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
+        ImageIcon image6 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/crying.png");
         JButton btnNewButton_6 = new JButton(image6);
         btnNewButton_6.setBounds(31 * 4, 22, 44, 41);
         btnNewButton_6.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_6.setContentAreaFilled(false);
         panel_2.add(btnNewButton_2);
 
-        ImageIcon image7 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/scared.png");
+        ImageIcon image7 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/scared.png");
         JButton btnNewButton_7 = new JButton(image7);
         btnNewButton_7.setBounds(378, 22, 44, 41);
         btnNewButton_7.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -323,14 +356,18 @@ public class AbstractChatWindownew {
         contentPane.add(panel_3);
         panel_3.setLayout(null);
 
-        ImageIcon image8 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/send.png");
+        ImageIcon image8 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/send.png");
         btnSend = new JButton(image8);
         btnSend.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnSend.setContentAreaFilled(false);
         btnSend.setBounds(498, 5, 64, 64);
         panel_3.add(btnSend);
 
-        ImageIcon image9 = new ImageIcon("/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/document.png");
+        ImageIcon image9 =
+                new ImageIcon(
+                        "/Users/amarees/IdeaProjects/basic-java-instant-messenger/src/main/resources/image/document.png");
         btnSendFile = new JButton(image9);
         btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnSendFile.setContentAreaFilled(false);
