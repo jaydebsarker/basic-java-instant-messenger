@@ -99,7 +99,7 @@ public class ClientTest {
     @Test
     public void clientLogInNameIsCorrect() throws InterruptedException {
         // given
-        Client client = new Client(clientChatWindow);
+        //Client client = new Client(clientChatWindow);
         client.startRunning();
         Thread.sleep(WAIT_SECS);
 
