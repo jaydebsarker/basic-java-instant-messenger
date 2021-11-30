@@ -1,6 +1,8 @@
 package bjim.client;
 
 import bjim.common.Connection;
+
+import javax.swing.text.BadLocationException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -20,20 +22,20 @@ public class Client {
 
     private String lastReceivedMessage = "";
     boolean type;
-
+     String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public Client() {
+    public Client() throws IOException, BadLocationException {
         this(new ClientChatWindow());
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP) {
+    public Client(String serverIP) throws IOException, BadLocationException {
         this(serverIP, new ClientChatWindow());
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP, String username) {
+    public Client(String serverIP, String username) throws IOException, BadLocationException {
         this(serverIP, new ClientChatWindow(username));
     }
 
@@ -83,11 +85,30 @@ public class Client {
 
     public void sendMessage(String message) {
 
-        String messageToSend = chatWindow.getUsername() + ":\n  " + message;
+        if(message.equals(":D"))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sm" ;}
+
+        else   if(message.equals(":'("))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"cr" ;}
+        else   if(message.equals("<3)"))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"hr" ;}
+        else   if(message.equals(":("))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sd" ;}
+
+        else   if(message.equals("o.O"))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"ag" ;}
+        else   if(message.equals(":'D"))
+        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sc" ;}
+
+
+
+
+
+        else {messageToSend = chatWindow.getUsername() + ":\n  " + message;}
         try {
             sendMessage(messageToSend, connection);
             showMessage("\n" + messageToSend);
-        } catch (IOException ioException) {
+        } catch (IOException | BadLocationException ioException) {
             chatWindow.append("\nSomething is messed up!");
         }
     }
@@ -97,7 +118,7 @@ public class Client {
         connection.getOutput().flush();
     }
 
-    private void showMessage(final String m) {
+    private void showMessage(final String m) throws BadLocationException {
         chatWindow.showMessage(m);
     }
 
@@ -121,7 +142,7 @@ public class Client {
                 connectToServer();
                 setupStreams();
                 whileChatting();
-            } catch (IOException eofException) {
+            } catch (IOException | BadLocationException eofException) {
                 setStatus(CONNECTION_CLOSED);
             } finally {
                 disconnect();
@@ -134,11 +155,11 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void setupStreams() {
+        private void setupStreams() throws BadLocationException {
             showMessage("\nStreams are now good to go!");
         }
 
-        private void whileChatting() throws IOException {
+        private void whileChatting() throws IOException, BadLocationException {
             ableToType(true);
             do {
                 try {
@@ -181,7 +202,7 @@ public class Client {
                 connectToServer();
 
                 whileChatting();
-            } catch (IOException eofException) {
+            } catch (IOException | BadLocationException eofException) {
                 setStatus(CONNECTION_CLOSED);
             } finally {
                 disconnect();
@@ -194,7 +215,7 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void whileChatting() throws IOException {
+        private void whileChatting() throws IOException, BadLocationException {
             ableToType(true);
             do {
                 try {
