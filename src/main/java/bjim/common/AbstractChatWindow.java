@@ -71,7 +71,7 @@ public class AbstractChatWindow {
                     userInput.setText("");
                 });
     }
-
+//this is comment
     public void append(String s) {
         chatText.append(s);
     }
