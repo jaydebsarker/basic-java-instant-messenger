@@ -431,7 +431,7 @@ public class AbstractChatWindow {
 
                     String Path = "C:/image/cry1.gif";
                     kit.insertHTML(doc1, doc1.getLength(),"<img src=\"file:\\"+Path+"\" alt=\"some_text\" width=\"100\" height=\"100\">", 0, 0, HTML.Tag.IMG);
-
+               
                 } catch (BadLocationException | IOException e) {
                     e.printStackTrace();
                 }
@@ -525,6 +525,7 @@ public class AbstractChatWindow {
                     doc1.insertString(doc1.getLength(), text, style);
 
                     String Path = "image/emo.gif";
+
 
                 } catch (BadLocationException e) {
                     e.printStackTrace();
