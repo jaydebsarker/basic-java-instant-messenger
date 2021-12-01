@@ -183,6 +183,42 @@ public class ClientTest {
     }
 
     @Test
+    public void oneReceiveAListOfOnlineUsersAfterAnotherDisconnects() throws InterruptedException {
+
+        // given
+        when(clientChatWindow2.getUsername()).thenReturn("Client2");
+
+        Client client1 = new Client(clientChatWindow);
+        Client client2 = new Client(clientChatWindow2);
+
+        // when
+        client1.startRunning();
+        client2.startRunning();
+        Thread.sleep(WAIT_SECS);
+
+        // then
+        Set<String> onlineUsers1 = client1.getOnlineUsers();
+        assertEquals(2, onlineUsers1.size());
+        assertEquals("Client2", new ArrayList<>(onlineUsers1).get(0));
+        assertEquals("Client", new ArrayList<>(onlineUsers1).get(1));
+
+        Set<String> onlineUsers2 = client2.getOnlineUsers();
+        assertEquals(2, onlineUsers2.size());
+        assertEquals("Client2", new ArrayList<>(onlineUsers2).get(0));
+        assertEquals("Client", new ArrayList<>(onlineUsers2).get(1));
+
+        // after
+        client1.stopRunning();
+        Thread.sleep(WAIT_SECS);
+
+        onlineUsers2 = client2.getOnlineUsers();
+        assertEquals(1, onlineUsers2.size());
+        assertEquals("Client2", new ArrayList<>(onlineUsers2).get(0));
+
+        client2.stopRunning();
+    }
+
+    @Test
     public void twoClientsSendMessagesToServer() throws InterruptedException {
 
         // given

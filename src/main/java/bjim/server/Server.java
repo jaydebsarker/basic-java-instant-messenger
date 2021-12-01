@@ -21,7 +21,6 @@ public class Server {
 
     // the socket where the server is listening
     private ServerSocket serverSocket;
-    private String getstatus;
 
     private final ServerChatWindow chatWindow;
 
