@@ -1,15 +1,13 @@
 package bjim.client;
 
-import lombok.Getter;
+import static java.awt.BorderLayout.NORTH;
+import static java.awt.Font.BOLD;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.util.List;
-
-import static java.awt.BorderLayout.NORTH;
-import static java.awt.Font.BOLD;
+import lombok.Getter;
 
 public class OnlineUsersWindow {
 
@@ -22,8 +20,7 @@ public class OnlineUsersWindow {
     protected final JLabel onlineUsersLabel;
     protected final JList<String> onlineUsersJList;
 
-    @Getter
-    private final String username;
+    @Getter private final String username;
 
     public OnlineUsersWindow(String username) {
 
@@ -53,12 +50,13 @@ public class OnlineUsersWindow {
     }
 
     public void onUsernameSelected(ListSelectionListener listSelectionListener) {
-        onlineUsersJList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                listSelectionListener.valueChanged(e);
-            }
-        });
+        onlineUsersJList.addListSelectionListener(
+                new ListSelectionListener() {
+                    @Override
+                    public void valueChanged(ListSelectionEvent e) {
+                        listSelectionListener.valueChanged(e);
+                    }
+                });
     }
 
     public void setOnlineUsersJList(String[] onlineUsers) {

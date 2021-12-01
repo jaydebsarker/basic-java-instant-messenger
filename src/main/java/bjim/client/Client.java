@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toSet;
 
 import bjim.common.Connection;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
@@ -56,9 +55,9 @@ public class Client {
         this.chatWindow = chatWindow;
         this.chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
         this.onlineUsersWindow = new OnlineUsersWindow(chatWindow.getUsername());
-//        this.onlineUsersWindow.onUsernameSelected(e -> {
-//
-//        });
+        //        this.onlineUsersWindow.onUsernameSelected(e -> {
+        //
+        //        });
     }
 
     public boolean isWindowVisibleClientSide() {
