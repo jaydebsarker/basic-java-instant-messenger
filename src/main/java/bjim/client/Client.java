@@ -1,13 +1,18 @@
 package bjim.client;
 
+import static java.util.stream.Collectors.toSet;
+
 import bjim.common.Connection;
 
 import javax.swing.text.BadLocationException;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.Getter;
 
 public class Client {
 
@@ -24,6 +29,10 @@ public class Client {
     boolean type;
      String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ObjectOutputStream output;
+
+    @Getter private Set<String> onlineUsers;
+
 
     public Client() throws IOException, BadLocationException {
         this(new ClientChatWindow());
@@ -53,17 +62,7 @@ public class Client {
         return chatWindow.isVisible();
     }
 
-    public boolean checkTypingStatus() {
-        return type;
-    }
-
-    public void startRunning1() {
-
-        executorService.submit(new StartClient1());
-    }
-
     public void startRunning() {
-
         executorService.submit(new StartClient());
     }
 
@@ -113,6 +112,14 @@ public class Client {
         }
     }
 
+    public void sendControlMessage(String message) {
+        try {
+            sendMessage(message, connection);
+        } catch (IOException ioException) {
+            chatWindow.append("\nSomething is messed up!");
+        }
+    }
+
     private void sendMessage(String messageToSend, Connection connection) throws IOException {
         connection.getOutput().writeObject(messageToSend);
         connection.getOutput().flush();
@@ -134,64 +141,12 @@ public class Client {
         return connection != null && connection.isConnected();
     }
 
-    private class StartClient1 implements Runnable {
+    private void sendUsername() {
+        sendControlMessage("username:".concat(getUsername()));
+    }
 
-        @Override
-        public void run() {
-            try {
-                connectToServer();
-                setupStreams();
-                whileChatting();
-            } catch (IOException | BadLocationException eofException) {
-                setStatus(CONNECTION_CLOSED);
-            } finally {
-                disconnect();
-            }
-        }
-
-        private void connectToServer() throws IOException {
-            setStatus("Attempting to connect to server @" + serverIP + ":" + serverPort);
-            connection = new Connection(new Socket(InetAddress.getByName(serverIP), serverPort));
-            setStatus("Connected to server @" + serverIP + ":" + serverPort);
-        }
-
-        private void setupStreams() throws BadLocationException {
-            showMessage("\nStreams are now good to go!");
-        }
-
-        private void whileChatting() throws IOException, BadLocationException {
-            ableToType(true);
-            do {
-                try {
-                    lastReceivedMessage = String.valueOf(connection.getInput().readObject());
-                    showMessage("\n" + lastReceivedMessage);
-
-                } catch (ClassNotFoundException classNotFoundException) {
-                    showMessage("\nDont know ObjectType!");
-                }
-            } while (!lastReceivedMessage.equals("\nADMIN - END"));
-        }
-
-        private void disconnect() {
-            setStatus(CONNECTION_CLOSED);
-            ableToType(false);
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (IOException e) {
-                setStatus(CONNECTION_CLOSED);
-            }
-        }
-
-        private void ableToType(final boolean tof) {
-            chatWindow.ableToType(tof);
-            type = tof;
-        }
-
-        private void setStatus(String text) {
-            chatWindow.setStatus(text);
-        }
+    private String getUsername() {
+        return chatWindow.getUsername();
     }
 
     private class StartClient implements Runnable {
@@ -200,7 +155,7 @@ public class Client {
         public void run() {
             try {
                 connectToServer();
-
+                sendUsername();
                 whileChatting();
             } catch (IOException | BadLocationException eofException) {
                 setStatus(CONNECTION_CLOSED);
@@ -215,12 +170,16 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void whileChatting() throws IOException, BadLocationException {
+        private void whileChatting() throws IOException {
             ableToType(true);
             do {
                 try {
                     lastReceivedMessage = String.valueOf(connection.getInput().readObject());
-                    showMessage("\n" + lastReceivedMessage);
+                    if (lastReceivedMessage.startsWith("users:")) {
+                        updateOnlineUsers();
+                    } else {
+                        showMessage("\n" + lastReceivedMessage);
+                    }
 
                 } catch (ClassNotFoundException classNotFoundException) {
                     showMessage("\nDont know ObjectType!");
@@ -247,5 +206,9 @@ public class Client {
         private void setStatus(String text) {
             chatWindow.setStatus(text);
         }
+    }
+
+    private void updateOnlineUsers() {
+        onlineUsers = Arrays.stream(lastReceivedMessage.split(":")[1].split(",")).collect(toSet());
     }
 }

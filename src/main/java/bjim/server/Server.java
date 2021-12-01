@@ -3,8 +3,8 @@ package bjim.server;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.Getter;
@@ -17,17 +17,17 @@ import javax.swing.text.BadLocationException;
 public class Server {
 
     public static final int DEFAULT_PORT = 6789;
+    public static final String ANONYMOUS = "Anonymous";
 
     // the port where the server is listening
     private final int port;
 
     // the socket where the server is listening
     private ServerSocket serverSocket;
-    private String getstatus;
 
     private final ServerChatWindow chatWindow;
 
-    private final List<Connection> connections = new ArrayList<>();
+    private final Map<Connection, String> connections = new ConcurrentHashMap<>();
     String messageToSend;
 
     // checking last received message from client to server
@@ -58,17 +58,8 @@ public class Server {
         return chatWindow.isUserMessageVisible();
     }
 
-    public boolean abletowrite() {
-        return chatWindow.abletowrite();
-    }
-
-    public boolean serversocketcondition() {
-        return serverSocket.isBound();
-    }
-
     public void startRunning() {
         chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
-
         serverThreadPool.submit(new StartServer());
     }
 
@@ -92,7 +83,7 @@ public class Server {
 
 
 
-        for (Connection connection : connections) {
+        for (Connection connection : connections.keySet()) {
             try {
                 sendMessage(messageToSend, connection);
                 showMessage("\n" + messageToSend);
@@ -102,13 +93,14 @@ public class Server {
         }
     }
 
-    public String getmessage() {
-        System.out.println(getstatus);
-        return getstatus;
-    }
-
-    public void setmessage(String m) {
-        getstatus = m;
+    public synchronized void broadcastControlMessage(String message) {
+        for (Connection connection : connections.keySet()) {
+            try {
+                sendMessage(message, connection);
+            } catch (IOException ioException) {
+                chatWindow.append("\nERROR: Can't broadcast control message");
+            }
+        }
     }
 
     private void sendMessage(String messageToSend, Connection connection) throws IOException {
@@ -153,7 +145,7 @@ public class Server {
 
     public int numberOfClientsConnected() {
         int count = 0;
-        for (Connection connection : connections) {
+        for (Connection connection : connections.keySet()) {
             if (connection != null && !connection.getSocket().isClosed()) {
                 ++count;
             }
@@ -186,7 +178,7 @@ public class Server {
         private void waitForConnection() throws IOException {
 
             Connection connection = new Connection(serverSocket.accept());
-            connections.add(connection);
+            addConnection(connection, ANONYMOUS);
 
             handlerThreadPool.submit(() -> readMessages(connection));
 
@@ -197,7 +189,7 @@ public class Server {
             showMessage("\nClosing connections\n");
             ableToType(false);
 
-            for (Connection connection : connections) {
+            for (Connection connection : connections.keySet()) {
                 closeClientConnection(connection);
             }
             connections.clear();
@@ -208,8 +200,13 @@ public class Server {
             while (connection != null && connection.getInput() != null) {
                 try {
                     lastReceivedMessage = String.valueOf(connection.getInput().readObject());
-                    showMessage("\n" + lastReceivedMessage);
 
+                    if (lastReceivedMessage.startsWith("username:")) {
+                        String username = lastReceivedMessage.split(":")[1];
+                        addConnection(connection, username);
+                    } else {
+                        showMessage("\n" + lastReceivedMessage);
+                    }
                 } catch (IOException e) {
                     closeClientConnection(connection);
                     setStatus("(" + connections.size() + ") client(s) are connected");
@@ -220,23 +217,37 @@ public class Server {
             }
         }
 
-        public void setStatus(String text) {
-            chatWindow.setStatus(text);
-            setmessage(text);
-            getmessage();
-        }
-
         private void closeClientConnection(Connection connection) {
             if (connection == null) {
                 return;
             }
             try {
                 connection.close();
-                connections.remove(connection);
+                removeConnection(connection);
             } catch (IOException e) {
                 System.out.println(
                         "Error while attempting to close client connection: " + e.getMessage());
             }
         }
+    }
+
+    private void setStatus(String text) {
+        chatWindow.setStatus(text);
+    }
+
+    private void removeConnection(Connection connection) {
+        connections.remove(connection);
+        broadcastControlMessage("users:" + getAllUsernames());
+    }
+
+    private void addConnection(Connection connection, String username) {
+        connections.put(connection, username);
+        broadcastControlMessage("users:" + getAllUsernames());
+    }
+
+    public String getAllUsernames() {
+        return connections.values().stream()
+                .reduce((s1, s2) -> s1.concat(",").concat(s2))
+                .orElse("");
     }
 }
