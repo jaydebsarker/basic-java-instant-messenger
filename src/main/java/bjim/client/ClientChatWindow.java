@@ -2,16 +2,13 @@ package bjim.client;
 
 import bjim.common.AbstractChatWindow;
 
-import javax.swing.text.BadLocationException;
-import java.io.IOException;
-
 public class ClientChatWindow extends AbstractChatWindow {
 
-    public ClientChatWindow() throws IOException, BadLocationException {
+    public ClientChatWindow() {
         this("Client");
     }
 
-    public ClientChatWindow(String username) throws IOException, BadLocationException {
+    public ClientChatWindow(String username) {
         super(username);
     }
 }

@@ -3,15 +3,14 @@ package bjim.client;
 import static java.util.stream.Collectors.toSet;
 
 import bjim.common.Connection;
-
-import javax.swing.text.BadLocationException;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.text.BadLocationException;
 import lombok.Getter;
 
 public class Client {
@@ -26,25 +25,23 @@ public class Client {
     private Connection connection;
 
     private String lastReceivedMessage = "";
-    boolean type;
-     String messageToSend;
+
+    String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private ObjectOutputStream output;
 
     @Getter private Set<String> onlineUsers;
 
-
-    public Client() throws IOException, BadLocationException {
+    public Client() {
         this(new ClientChatWindow());
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP) throws IOException, BadLocationException {
+    public Client(String serverIP) {
         this(serverIP, new ClientChatWindow());
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP, String username) throws IOException, BadLocationException {
+    public Client(String serverIP, String username) {
         this(serverIP, new ClientChatWindow(username));
     }
 
@@ -84,26 +81,21 @@ public class Client {
 
     public void sendMessage(String message) {
 
-        if(message.equals(":D"))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sm" ;}
-
-        else   if(message.equals(":'("))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"cr" ;}
-        else   if(message.equals("<3)"))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"hr" ;}
-        else   if(message.equals(":("))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sd" ;}
-
-        else   if(message.equals("o.O"))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"ag" ;}
-        else   if(message.equals(":'D"))
-        {  messageToSend = chatWindow.getUsername() + ":\n  "+"sc" ;}
-
-
-
-
-
-        else {messageToSend = chatWindow.getUsername() + ":\n  " + message;}
+        if (message.equals(":D")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "sm";
+        } else if (message.equals(":'(")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "cr";
+        } else if (message.equals("<3)")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "hr";
+        } else if (message.equals(":(")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "sd";
+        } else if (message.equals("o.O")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "ag";
+        } else if (message.equals(":'D")) {
+            messageToSend = chatWindow.getUsername() + ":\n  " + "sc";
+        } else {
+            messageToSend = chatWindow.getUsername() + ":\n  " + message;
+        }
         try {
             sendMessage(messageToSend, connection);
             showMessage("\n" + messageToSend);
@@ -170,7 +162,7 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void whileChatting() throws IOException {
+        private void whileChatting() throws IOException, BadLocationException {
             ableToType(true);
             do {
                 try {
@@ -181,7 +173,7 @@ public class Client {
                         showMessage("\n" + lastReceivedMessage);
                     }
 
-                } catch (ClassNotFoundException classNotFoundException) {
+                } catch (ClassNotFoundException e) {
                     showMessage("\nDont know ObjectType!");
                 }
             } while (!lastReceivedMessage.equals("\nADMIN - END"));

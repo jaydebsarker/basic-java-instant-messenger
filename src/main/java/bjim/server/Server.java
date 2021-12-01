@@ -7,11 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.text.BadLocationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-
-import javax.swing.text.BadLocationException;
 
 @RequiredArgsConstructor
 public class Server {
@@ -38,11 +37,11 @@ public class Server {
 
     private final ExecutorService handlerThreadPool = Executors.newFixedThreadPool(10);
 
-    public Server() throws IOException, BadLocationException {
+    public Server() {
         this(DEFAULT_PORT);
     }
 
-    public Server(int port) throws IOException, BadLocationException {
+    public Server(int port) {
         this(port, new ServerChatWindow());
     }
 
@@ -80,8 +79,6 @@ public class Server {
         } else {
             messageToSend = chatWindow.getUsername() + ":\n  " + message;
         }
-
-
 
         for (Connection connection : connections.keySet()) {
             try {
