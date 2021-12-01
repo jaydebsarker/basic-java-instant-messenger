@@ -99,16 +99,16 @@ public class AbstractChatWindow {
         chatWindow.setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.setBounds(0, 0, 573, 67);
-        contentPane.add(panel);
-        panel.setLayout(null);
+        //        JPanel panel = new JPanel();
+        //        panel.setBackground(Color.LIGHT_GRAY);
+        //        panel.setBounds(0, 0, 573, 67);
+        //        contentPane.add(panel);
+        //        panel.setLayout(null);
 
-        ImageIcon image2 = new ImageIcon("image/profile.png");
-        JLabel lblNewLabel = new JLabel(image2);
-        lblNewLabel.setBounds(20, 0, 66, 67);
-        panel.add(lblNewLabel);
+        //        ImageIcon image2 = new ImageIcon("image/profile.png");
+        //        JLabel lblNewLabel = new JLabel(image2);
+        //        lblNewLabel.setBounds(20, 0, 66, 67);
+        //        panel.add(lblNewLabel);
 
         JPanel panel_6 = new JPanel();
 
@@ -246,20 +246,19 @@ public class AbstractChatWindow {
         contentPane.add(panel_3);
         panel_3.setLayout(null);
 
-        ImageIcon image8 = new ImageIcon("image/send.png");
-        btnSend = new JButton(image8);
-        btnSend.setBorder(new EmptyBorder(0, 0, 0, 0));
-        btnSend.setContentAreaFilled(false);
-        btnSend.setBounds(498, 5, 64, 64);
-        panel_3.add(btnSend);
+        //        ImageIcon image8 = new ImageIcon("image/send.png");
+        //        btnSend = new JButton(image8);
+        //        btnSend.setBorder(new EmptyBorder(0, 0, 0, 0));
+        //        btnSend.setContentAreaFilled(false);
+        //        btnSend.setBounds(498, 5, 64, 64);
+        //        panel_3.add(btnSend);
 
-        ImageIcon image9 = new ImageIcon("image/document.png");
-        btnSendFile = new JButton(image9);
-        btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
-        btnSendFile.setContentAreaFilled(false);
-
-        btnSendFile.setBounds(440, 10, 64, 53);
-        panel_3.add(btnSendFile);
+        //        ImageIcon image9 = new ImageIcon("image/document.png");
+        //        btnSendFile = new JButton(image9);
+        //        btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
+        //        btnSendFile.setContentAreaFilled(false);
+        //        btnSendFile.setBounds(440, 10, 64, 53);
+        //        panel_3.add(btnSendFile);
 
         userInput = new JTextField();
         userInput.setBounds(0, 5, 433, 58);
