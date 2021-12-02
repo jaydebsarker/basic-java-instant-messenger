@@ -265,6 +265,15 @@ public class AbstractChatWindow {
         panel_3.add(userInput);
         userInput.setColumns(10);
 
+
+        JPanel statusPanel = new JPanel();
+
+        statusPanel.setBounds(0, 520, 575, 30);
+        statusPanel.setBackground(Color.green);
+
+        statusPanel.add(status);
+        contentPane.add(statusPanel);
+
         if (username.equals("Client")) {
             preFrame.setVisible(true);
             chatWindow.setVisible(false);
