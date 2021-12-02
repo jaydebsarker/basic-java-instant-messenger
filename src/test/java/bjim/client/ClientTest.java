@@ -20,6 +20,8 @@ public class ClientTest {
 
     final ServerChatWindow serverChatWindow = mock(ServerChatWindow.class);
     final ClientChatWindow clientChatWindow = mock(ClientChatWindow.class);
+
+    //mock AbstractChatWindownew
     final AbstractChatWindownew abstractChatWindownew= mock(AbstractChatWindownew.class);
 
     private Server server;
