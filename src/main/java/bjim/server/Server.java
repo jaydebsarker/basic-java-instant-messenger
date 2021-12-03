@@ -53,10 +53,6 @@ public class Server {
         return chatWindow.isVisible();
     }
 
-    public boolean isServerMessageVisible() {
-        return chatWindow.isUserMessageVisible();
-    }
-
     public void startRunning() {
         chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
         serverThreadPool.submit(new StartServer());

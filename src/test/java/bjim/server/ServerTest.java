@@ -89,16 +89,6 @@ public class ServerTest {
     }
 
     @Test
-    public void serverUserMessageVisibleTrue() {
-
-        // given
-        when(serverChatWindow.isUserMessageVisible()).thenReturn(true);
-
-        // then
-        assertTrue(server.isServerMessageVisible());
-    }
-
-    @Test
     public void windowIsVisibleDuringWhenStartTheServer() {
 
         // given

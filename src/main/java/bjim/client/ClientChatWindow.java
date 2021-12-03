@@ -2,7 +2,7 @@ package bjim.client;
 
 import bjim.common.*;
 
-public class ClientChatWindow extends AbstractChatWindownew {
+public class ClientChatWindow extends AbstractChatWindow {
 
     public ClientChatWindow() {
         this("Client");

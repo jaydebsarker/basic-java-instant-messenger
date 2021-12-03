@@ -11,8 +11,4 @@ public class ServerChatWindow extends AbstractChatWindow {
     public ServerChatWindow(String username) {
         super(username);
     }
-
-    public boolean isUserMessageVisible() {
-        return userInput.isVisible();
-    }
 }

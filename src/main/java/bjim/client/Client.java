@@ -5,9 +5,6 @@ import static java.util.stream.Collectors.toSet;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import bjim.common.*;
-import bjim.common.Connection;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
@@ -34,22 +31,14 @@ public class Client {
 
     @Getter private Set<String> onlineUsers;
 
-    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
-    private Connection connection;
-
-    private String lastReceivedMessage = "";
-
     private final OnlineUsersWindow onlineUsersWindow;
 
-    String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Value(staticConstructor = "username")
     public static class Username {
         String username;
     }
-
-    @Getter private Set<String> onlineUsers;
 
     public Client() {
         this(new ClientChatWindow());
@@ -109,6 +98,7 @@ public class Client {
 
     public void sendMessage(String message) {
 
+        String messageToSend;
         if (message.equals(":D")) {
             messageToSend = chatWindow.getUsername() + ":\n  " + "sm";
         } else if (message.equals(":'(")) {

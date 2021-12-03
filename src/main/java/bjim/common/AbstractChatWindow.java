@@ -3,8 +3,6 @@ package bjim.common;
 import static java.awt.Font.BOLD;
 import static javax.swing.SwingUtilities.invokeLater;
 
-import bjim.client.Client;
-import bjim.server.Server;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,33 +17,19 @@ import javax.swing.text.html.HTMLEditorKit;
 import lombok.Getter;
 
 public class AbstractChatWindow {
-    public Server server;
-    public Client client;
+
     private static final int FONT_SIZE = 18;
-    private static final int WINDOW_WIDTH = 500;
-    private static final int WINDOW_HEIGHT = 300;
     private static final String FONT_NAME = "Segoe Script";
-
-    public JFrame chatWindow;
-    public JTextField userInput;
-
-    public JLabel status;
-
-    public Style style;
-    JTextField usernameChooser;
-    JFrame preFrame;
-
-    public HTMLDocument doc1;
-
-    public String msg;
+    private JFrame chatWindow;
+    private JTextField userInput;
+    private JLabel status;
+    private HTMLDocument doc1;
     private JPanel contentPane;
-    public JTextPane pan;
-    private JButton btnSendFile;
+    private JTextPane pan;
     private JProgressBar progressBar;
-    JButton btnSend;
-
-    public ImageIcon image4;
-    public HTMLEditorKit kit;
+    private ImageIcon image4;
+    private HTMLEditorKit kit;
+    public Style style;
 
     @Getter public String username;
 
@@ -53,46 +37,12 @@ public class AbstractChatWindow {
 
         this.username = username;
 
-        preFrame = new JFrame("Choose your username!(Colt chat v0.1");
-        preFrame.setBounds(450, 190, 1014, 597);
-        usernameChooser = new JTextField();
-
-        JLabel chooseUsernameLabel = new JLabel("Pick a username:");
-        JButton enterServer = new JButton("Enter Chat Server");
-
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        preFrame.setContentPane(contentPane);
-        contentPane.setLayout(null);
-
-        JLabel lblNewUserRegister = new JLabel("Welcome!!!");
-        lblNewUserRegister.setFont(new Font("Times New Roman", Font.BOLD, 42));
-        lblNewUserRegister.setBounds(362, 52, 325, 50);
-        contentPane.add(lblNewUserRegister);
-
-        JLabel lblName = new JLabel("Enter your name");
-        lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblName.setBounds(362, 152, 150, 43);
-        contentPane.add(lblName);
-
-        usernameChooser = new JTextField();
-        usernameChooser.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        usernameChooser.setBounds(362, 230, 228, 50);
-        contentPane.add(usernameChooser);
-        usernameChooser.setColumns(10);
-
-        enterServer.setFont(new Font("Tahoma", Font.PLAIN, 22));
-        enterServer.setBounds(362, 350, 259, 74);
-        contentPane.add(enterServer);
-
-        enterServer.addActionListener(new AbstractChatWindow.enterServerButtonListener());
-
         status = new JLabel("");
 
         Font font = new Font(FONT_NAME, BOLD, FONT_SIZE);
         chatWindow = new JFrame(username);
         chatWindow.setResizable(false);
-        chatWindow.setTitle("Chat Frame");
+        chatWindow.setTitle(username);
         chatWindow.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -273,28 +223,7 @@ public class AbstractChatWindow {
         statusPanel.add(status);
         contentPane.add(statusPanel);
 
-        if (username.equals("Client")) {
-            preFrame.setVisible(true);
-            chatWindow.setVisible(false);
-        } else {
-            preFrame.setVisible(false);
-            chatWindow.setVisible(true);
-        }
-    }
-
-    class enterServerButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
-
-            username = usernameChooser.getText();
-
-            if (username.length() <= 1) {
-                System.out.println("No!");
-            } else {
-
-                preFrame.setVisible(false);
-                chatWindow.setVisible(true);
-            }
-        }
+        chatWindow.setVisible(true);
     }
 
     public void setStatus(String statusText) {
@@ -307,10 +236,6 @@ public class AbstractChatWindow {
                     actionListener.actionPerformed(e);
                     userInput.setText("");
                 });
-    }
-
-    public String emoji() {
-        return msg;
     }
 
     public void append(String s) {
@@ -332,7 +257,7 @@ public class AbstractChatWindow {
 
                             doc1.insertString(doc1.getLength(), message, style);
 
-                            String Path = "C:/image/emo.gif";
+                            String Path = "image/emo.gif";
                             kit.insertHTML(
                                     doc1,
                                     doc1.getLength(),
@@ -355,7 +280,7 @@ public class AbstractChatWindow {
 
                             doc1.insertString(doc1.getLength(), message, style);
 
-                            String Path = "C:/image/cry1.gif";
+                            String Path = "image/cry1.gif";
                             kit.insertHTML(
                                     doc1,
                                     doc1.getLength(),
