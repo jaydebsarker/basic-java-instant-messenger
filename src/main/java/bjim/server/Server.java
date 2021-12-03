@@ -65,8 +65,8 @@ public class Server {
             try {
                 sendMessage(messageToSend, connection);
                 showMessage("\n" + messageToSend);
-            } catch (IOException | BadLocationException ioException) {
-                chatWindow.append("\nERROR: Can't send that message");
+            } catch (IOException ioException) {
+                chatWindow.setStatus("Failed to send message");
             }
         }
     }
@@ -76,7 +76,7 @@ public class Server {
             try {
                 sendMessage(message, connection);
             } catch (IOException ioException) {
-                chatWindow.append("\nERROR: Can't broadcast control message");
+                chatWindow.setStatus("Failed to broadcast control message");
             }
         }
     }
@@ -98,7 +98,7 @@ public class Server {
         }
     }
 
-    public synchronized void showMessage(String text) throws BadLocationException {
+    public synchronized void showMessage(String text) {
         chatWindow.showMessage(text);
     }
 
@@ -189,7 +189,7 @@ public class Server {
                     closeClientConnection(connection);
                     setStatus("(" + connections.size() + ") client(s) are connected");
                     break;
-                } catch (ClassNotFoundException | BadLocationException e) {
+                } catch (ClassNotFoundException e) {
                     setStatus("(" + connections.size() + ") client(s) are connected");
                 }
             }
