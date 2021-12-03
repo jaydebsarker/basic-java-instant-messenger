@@ -191,6 +191,9 @@ public class Server {
 
                         Message message = MessageParser.parse(lastReceivedMessage);
 
+                        if (message.isSelfMessage()) {
+                            continue;
+                        }
                         connections.entrySet().stream()
                                 .filter(
                                         entry ->

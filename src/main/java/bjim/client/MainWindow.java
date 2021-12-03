@@ -4,6 +4,7 @@ import static java.awt.BorderLayout.NORTH;
 import static java.awt.Font.BOLD;
 import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
+import bjim.common.MessageParser.Message;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -99,7 +100,12 @@ public class MainWindow {
         mainFrame.setDefaultCloseOperation(defaultCloseOperation);
     }
 
-    public void showMessage(String message) {
+    public void showSentMessage(Message message) {
+        ClientChatWindow clientChatWindow = getClientChatWindow(message.getTargetUsername());
+        clientChatWindow.showMessage(message.getMsg());
+    }
+
+    public void showReceivedMessage(String message) {
         String from = message.substring(0, message.indexOf(":\n"));
         ClientChatWindow clientChatWindow = getClientChatWindow(from);
         clientChatWindow.showMessage(message);

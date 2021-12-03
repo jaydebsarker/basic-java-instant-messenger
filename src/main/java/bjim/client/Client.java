@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toSet;
 
 import bjim.common.Connection;
 import bjim.common.MessageParser;
+import bjim.common.MessageParser.Message;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -89,7 +90,7 @@ public class Client {
 
         try {
             sendMessage(messageToSend, connection);
-            //showMessage(MessageParser.parse(messageToSend).getMsg());
+            showSentMessage(MessageParser.parse(messageToSend));
         } catch (IOException ioException) {
             setStatus("Failed to send message");
         }
@@ -108,8 +109,12 @@ public class Client {
         connection.getOutput().flush();
     }
 
-    private void showMessage(String m) {
-        mainWindow.showMessage(m);
+    private void showSentMessage(Message message) {
+        mainWindow.showSentMessage(message);
+    }
+
+    private void showReceivedMessage(String message) {
+        mainWindow.showReceivedMessage(message);
     }
 
     public void setDefaultCloseOperation(int exitOnClose) {
@@ -160,7 +165,7 @@ public class Client {
                     if (lastReceivedMessage.startsWith("users:")) {
                         updateOnlineUsers();
                     } else {
-                        showMessage(lastReceivedMessage);
+                        showReceivedMessage(lastReceivedMessage);
                     }
 
                 } catch (ClassNotFoundException e) {

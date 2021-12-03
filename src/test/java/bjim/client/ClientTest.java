@@ -88,11 +88,11 @@ public class ClientTest {
         Thread.sleep(WAIT_SECS);
 
         // when
-        client.sendMessage("hi");
+        client.sendMessage("to:Server:\n  hi");
         Thread.sleep(WAIT_SECS);
 
         // then
-        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+        assertEquals("Client:\n  to:Server:\n  hi", server.getLastReceivedMessage());
 
         // after
         client.stopRunning();
@@ -199,8 +199,8 @@ public class ClientTest {
     public void twoClientsSendMessagesToServer() throws InterruptedException {
 
         // given
-        Client client1 = new Client();
-        Client client2 = new Client();
+        Client client1 = new Client(Username.username("Client"));
+        Client client2 = new Client(Username.username("Client2"));
 
         client1.startRunning();
         Thread.sleep(WAIT_SECS);
@@ -209,13 +209,13 @@ public class ClientTest {
         Thread.sleep(WAIT_SECS);
 
         // when...then
-        client1.sendMessage("hi");
+        client1.sendMessage("to:Server:\n  hi");
         Thread.sleep(WAIT_SECS);
-        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+        assertEquals("Client:\n  to:Server:\n  hi", server.getLastReceivedMessage());
 
-        client2.sendMessage("hello");
+        client2.sendMessage("to:Server:\n  hello");
         Thread.sleep(WAIT_SECS);
-        assertEquals("Client:\n  hello", server.getLastReceivedMessage());
+        assertEquals("Client2:\n  to:Server:\n  hello", server.getLastReceivedMessage());
 
         // after
         client1.stopRunning();

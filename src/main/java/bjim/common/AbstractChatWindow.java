@@ -2,9 +2,11 @@ package bjim.common;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
+import bjim.client.ClientChatWindow;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +17,6 @@ import javax.swing.text.Style;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-
-import bjim.client.ClientChatWindow;
 import lombok.Getter;
 
 public class AbstractChatWindow {
@@ -118,6 +118,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText(":'(");
+                        userInputAction();
                     }
                 });
 
@@ -134,6 +135,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText("<3)");
+                        userInputAction();
                     }
                 });
 
@@ -151,6 +153,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText(":D");
+                        userInputAction();
                     }
                 });
 
@@ -168,6 +171,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText(":(");
+                        userInputAction();
                     }
                 });
 
@@ -184,6 +188,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText("o.O");
+                        userInputAction();
                     }
                 });
 
@@ -201,6 +206,7 @@ public class AbstractChatWindow {
                     public void actionPerformed(ActionEvent e) {
 
                         userInput.setText(":'D");
+                        userInputAction();
                     }
                 });
 
@@ -246,6 +252,15 @@ public class AbstractChatWindow {
         }
     }
 
+    private void userInputAction() {
+        userInput.requestFocusInWindow();
+        try {
+            new Robot().keyPress(KeyEvent.VK_ENTER);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setStatus(String statusText) {
         status.setText(statusText);
     }
@@ -272,7 +287,7 @@ public class AbstractChatWindow {
 
     public void showMessage(String inputText) {
 
-        final String text = "\n" + inputText;
+        final String text = "\n\n" + inputText;
 
         int lastIndexOfNewLine = text.lastIndexOf(":\n") + 3;
         String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
