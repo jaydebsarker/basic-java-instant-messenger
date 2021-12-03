@@ -2,6 +2,9 @@ package bjim.client;
 
 import static java.util.stream.Collectors.toSet;
 
+import bjim.common.Connection;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import bjim.common.*;
 import bjim.common.Connection;
 import java.io.IOException;
@@ -23,6 +26,14 @@ public class Client {
 
     private final ClientChatWindow chatWindow;
     private final String serverIP;
+    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
+    private Connection connection;
+
+    private String lastReceivedMessage = "";
+    private ObjectOutputStream output;
+
+    @Getter private Set<String> onlineUsers;
+
     private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
     private Connection connection;
 
