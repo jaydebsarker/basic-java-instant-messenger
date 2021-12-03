@@ -26,6 +26,8 @@ public class Client {
 
     private String lastReceivedMessage = "";
 
+    private final OnlineUsersWindow onlineUsersWindow;
+
     String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -53,6 +55,10 @@ public class Client {
         this.serverIP = serverIP;
         this.chatWindow = chatWindow;
         this.chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
+        this.onlineUsersWindow = new OnlineUsersWindow(chatWindow.getUsername());
+        //        this.onlineUsersWindow.onUsernameSelected(e -> {
+        //
+        //        });
     }
 
     public boolean isWindowVisibleClientSide() {
@@ -201,6 +207,8 @@ public class Client {
     }
 
     private void updateOnlineUsers() {
-        onlineUsers = Arrays.stream(lastReceivedMessage.split(":")[1].split(",")).collect(toSet());
+        String[] onlineUsersArray = lastReceivedMessage.split(":")[1].split(",");
+        onlineUsers = Arrays.stream(onlineUsersArray).collect(toSet());
+        onlineUsersWindow.setOnlineUsersJList(onlineUsersArray);
     }
 }
