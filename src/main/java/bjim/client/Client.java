@@ -1,5 +1,6 @@
 package bjim.client;
 
+import bjim.common.*;
 import static java.util.stream.Collectors.toSet;
 
 import bjim.common.Connection;
@@ -10,8 +11,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.swing.text.BadLocationException;
-import lombok.Getter;
+import lombok.Value;
 
 public class Client {
 
@@ -31,10 +31,19 @@ public class Client {
     String messageToSend;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    @Value(staticConstructor = "username")
+    public static class Username {
+        String username;
+    }
+
     @Getter private Set<String> onlineUsers;
 
     public Client() {
         this(new ClientChatWindow());
+    }
+
+    public Client(Username userName) {
+        this(new ClientChatWindow(userName.username));
     }
 
     @SuppressWarnings("unused")
