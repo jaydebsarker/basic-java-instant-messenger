@@ -3,31 +3,28 @@ package bjim.client;
 import static java.util.stream.Collectors.toSet;
 
 import bjim.common.Connection;
+import bjim.common.MessageParser;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.swing.text.BadLocationException;
 import lombok.Getter;
 import lombok.Value;
 
 public class Client {
 
-    public static final String LOCAL_HOST = "127.0.0.1";
     private static final int SERVER_PORT = 6789;
+    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
+    public static final String LOCAL_HOST = "127.0.0.1";
     private static final String CONNECTION_CLOSED = "Connection closed";
 
-    private final ClientChatWindow chatWindow;
     private final String serverIP;
-    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
     private Connection connection;
 
     private String lastReceivedMessage = "";
-    private ObjectOutputStream output;
 
     @Getter private Set<String> onlineUsers;
 
@@ -40,40 +37,30 @@ public class Client {
         String username;
     }
 
+    @Value(staticConstructor = "serverIP")
+    public static class ServerIP {
+        String serverIP;
+    }
+
     public Client() {
-        this(new ClientChatWindow());
+        this(ServerIP.serverIP(LOCAL_HOST));
     }
 
     public Client(Username userName) {
-        this(new ClientChatWindow(userName.username));
+        this(ServerIP.serverIP(LOCAL_HOST), userName);
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP) {
-        this(serverIP, new ClientChatWindow());
+    public Client(ServerIP serverIP) {
+        this(serverIP, Username.username("Client"));
     }
 
     @SuppressWarnings("unused")
-    public Client(String serverIP, String username) {
-        this(serverIP, new ClientChatWindow(username));
-    }
-
-    public Client(ClientChatWindow chatWindow) {
-        this(LOCAL_HOST, chatWindow);
-    }
-
-    public Client(String serverIP, ClientChatWindow chatWindow) {
-        this.serverIP = serverIP;
-        this.chatWindow = chatWindow;
-        this.chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
-        this.mainWindow = new MainWindow(chatWindow.getUsername());
-        //        this.onlineUsersWindow.onUsernameSelected(e -> {
-        //
-        //        });
-    }
-
-    public boolean isWindowVisibleClientSide() {
-        return chatWindow.isVisible();
+    public Client(ServerIP serverIP, Username username) {
+        this.serverIP = serverIP.serverIP;
+        this.mainWindow = new MainWindow(username.username);
+        this.mainWindow.onSend(event -> sendMessage(event.getActionCommand()));
+        this.mainWindow.onUsernameSelected();
     }
 
     public void startRunning() {
@@ -98,13 +85,13 @@ public class Client {
 
     public void sendMessage(String message) {
 
-        String messageToSend = chatWindow.getUsername() + ":\n  " + message;
+        String messageToSend = mainWindow.getUsername() + ":\n  " + message;
 
         try {
             sendMessage(messageToSend, connection);
-            showMessage("\n" + messageToSend);
-        } catch (IOException | BadLocationException ioException) {
-            chatWindow.append("\nSomething is messed up!");
+            //showMessage(MessageParser.parse(messageToSend).getMsg());
+        } catch (IOException ioException) {
+            setStatus("Failed to send message");
         }
     }
 
@@ -112,7 +99,7 @@ public class Client {
         try {
             sendMessage(message, connection);
         } catch (IOException ioException) {
-            chatWindow.append("\nSomething is messed up!");
+            setStatus("Failed to send control message");
         }
     }
 
@@ -121,12 +108,12 @@ public class Client {
         connection.getOutput().flush();
     }
 
-    private void showMessage(final String m) throws BadLocationException {
-        chatWindow.showMessage(m);
+    private void showMessage(String m) {
+        mainWindow.showMessage(m);
     }
 
     public void setDefaultCloseOperation(int exitOnClose) {
-        chatWindow.setDefaultCloseOperation(exitOnClose);
+        mainWindow.setDefaultCloseOperation(exitOnClose);
     }
 
     public String getServerIP() {
@@ -142,7 +129,7 @@ public class Client {
     }
 
     private String getUsername() {
-        return chatWindow.getUsername();
+        return mainWindow.getUsername();
     }
 
     private class StartClient implements Runnable {
@@ -153,7 +140,7 @@ public class Client {
                 connectToServer();
                 sendUsername();
                 whileChatting();
-            } catch (IOException | BadLocationException eofException) {
+            } catch (IOException eofException) {
                 setStatus(CONNECTION_CLOSED);
             } finally {
                 disconnect();
@@ -166,26 +153,24 @@ public class Client {
             setStatus("Connected to server @" + serverIP + ":" + serverPort);
         }
 
-        private void whileChatting() throws IOException, BadLocationException {
-            ableToType(true);
+        private void whileChatting() throws IOException {
             do {
                 try {
                     lastReceivedMessage = String.valueOf(connection.getInput().readObject());
                     if (lastReceivedMessage.startsWith("users:")) {
                         updateOnlineUsers();
                     } else {
-                        showMessage("\n" + lastReceivedMessage);
+                        showMessage(lastReceivedMessage);
                     }
 
                 } catch (ClassNotFoundException e) {
-                    showMessage("\nDont know ObjectType!");
+                    setStatus("Dont know ObjectType!");
                 }
             } while (!lastReceivedMessage.equals("\nADMIN - END"));
         }
 
         private void disconnect() {
             setStatus(CONNECTION_CLOSED);
-            ableToType(false);
             try {
                 if (connection != null) {
                     connection.close();
@@ -194,14 +179,10 @@ public class Client {
                 setStatus(CONNECTION_CLOSED);
             }
         }
+    }
 
-        private void ableToType(final boolean tof) {
-            chatWindow.ableToType(tof);
-        }
-
-        private void setStatus(String text) {
-            chatWindow.setStatus(text);
-        }
+    private void setStatus(String text) {
+        mainWindow.setStatus(text);
     }
 
     private void updateOnlineUsers() {

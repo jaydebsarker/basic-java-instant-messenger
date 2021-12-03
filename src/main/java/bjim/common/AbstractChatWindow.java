@@ -1,6 +1,5 @@
 package bjim.common;
 
-import static java.awt.Font.BOLD;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.*;
@@ -22,15 +21,15 @@ public class AbstractChatWindow {
 
     private static final int FONT_SIZE = 18;
     private static final String FONT_NAME = "Segoe Script";
-    private JFrame chatWindow;
-    private JTextField userInput;
-    private JLabel status;
-    private HTMLDocument doc1;
-    private JPanel contentPane;
-    private JTextPane pan;
-    private JProgressBar progressBar;
-    private ImageIcon image4;
-    private HTMLEditorKit kit;
+    private final JFrame chatFrame;
+    private final JTextField userInput;
+    private final JLabel status;
+    private final HTMLDocument doc1;
+    private final JPanel contentPane;
+    private final JTextPane pan;
+    private final JProgressBar progressBar;
+    private final ImageIcon image4;
+    private final HTMLEditorKit kit;
     public Style style;
 
     private static final Map<String, String> EMOJIS = new HashMap<>();
@@ -44,22 +43,24 @@ public class AbstractChatWindow {
         EMOJIS.put(":'D", "image/smile_cry.gif");
     }
 
-    @Getter public String username;
+    @Getter public final String username;
 
-    public AbstractChatWindow(String username) {
+    @Getter public final String targetUser;
+
+    public AbstractChatWindow(String username, String targetUser) {
 
         this.username = username;
+        this.targetUser = targetUser;
 
         status = new JLabel("");
 
-        Font font = new Font(FONT_NAME, BOLD, FONT_SIZE);
-        chatWindow = new JFrame(username);
-        chatWindow.setResizable(false);
-        chatWindow.setTitle(username);
-        chatWindow.setBounds(100, 100, 576, 595);
+        chatFrame = new JFrame(username);
+        chatFrame.setResizable(false);
+        chatFrame.setTitle(username + " - " + targetUser);
+        chatFrame.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        chatWindow.setContentPane(contentPane);
+        chatFrame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
         //        JPanel panel = new JPanel();
@@ -79,6 +80,7 @@ public class AbstractChatWindow {
                 "body { font-family: " + FONT_NAME + "; " + "font-size: " + FONT_SIZE + "pt; }";
 
         pan = new JTextPane();
+        pan.setAutoscrolls(true);
         pan.setEditable(false);
         kit = new HTMLEditorKit();
         doc1 = new HTMLDocument();
@@ -237,7 +239,7 @@ public class AbstractChatWindow {
         statusPanel.add(status);
         contentPane.add(statusPanel);
 
-        chatWindow.setVisible(true);
+        chatFrame.setVisible(true);
     }
 
     public void setStatus(String statusText) {
@@ -247,22 +249,28 @@ public class AbstractChatWindow {
     public void onSend(ActionListener actionListener) {
         userInput.addActionListener(
                 e -> {
-                    actionListener.actionPerformed(e);
+                    actionListener.actionPerformed(
+                            new ActionEvent(
+                                    e.getSource(),
+                                    e.getID(),
+                                    "to:" + getTargetUser() + ":\n  " + e.getActionCommand()));
                     userInput.setText("");
                 });
     }
 
-    public void append(String s) {
-        pan.setText(s);
+    public void setVisible(boolean b) {
+        chatFrame.setVisible(true);
     }
 
     public boolean isVisible() {
-        return chatWindow.isVisible();
+        return chatFrame.isVisible();
     }
 
-    public void showMessage(final String text) {
+    public void showMessage(String inputText) {
 
-        int lastIndexOfNewLine = text.lastIndexOf("\n");
+        final String text = "\n" + inputText;
+
+        int lastIndexOfNewLine = text.lastIndexOf(":\n");
         String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
 
         if (path != null) {
@@ -304,6 +312,6 @@ public class AbstractChatWindow {
     }
 
     public void setDefaultCloseOperation(int exitOnClose) {
-        chatWindow.setDefaultCloseOperation(exitOnClose);
+        chatFrame.setDefaultCloseOperation(exitOnClose);
     }
 }

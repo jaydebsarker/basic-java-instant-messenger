@@ -1,13 +1,14 @@
 package bjim.server;
 
 import bjim.common.Connection;
+import bjim.common.MessageParser;
+import bjim.common.MessageParser.Message;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.swing.text.BadLocationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -62,12 +63,7 @@ public class Server {
         String messageToSend = chatWindow.getUsername() + ":\n  " + message;
 
         for (Connection connection : connections.keySet()) {
-            try {
-                sendMessage(messageToSend, connection);
-                showMessage("\n" + messageToSend);
-            } catch (IOException ioException) {
-                chatWindow.setStatus("Failed to send message");
-            }
+            doSendMessage(messageToSend, connection);
         }
     }
 
@@ -78,6 +74,15 @@ public class Server {
             } catch (IOException ioException) {
                 chatWindow.setStatus("Failed to broadcast control message");
             }
+        }
+    }
+
+    private void doSendMessage(String messageToSend, Connection connection) {
+        try {
+            sendMessage(messageToSend, connection);
+            showMessage(messageToSend);
+        } catch (IOException ioException) {
+            chatWindow.setStatus("Failed to send message");
         }
     }
 
@@ -163,8 +168,8 @@ public class Server {
             setStatus("(" + connections.size() + ") client(s) are connected");
         }
 
-        private void disconnectClients() throws BadLocationException {
-            showMessage("\nClosing connections\n");
+        private void disconnectClients() {
+            setStatus("Closing connections");
             ableToType(false);
 
             for (Connection connection : connections.keySet()) {
@@ -183,7 +188,17 @@ public class Server {
                         String username = lastReceivedMessage.split(":")[1];
                         addConnection(connection, username);
                     } else {
-                        showMessage("\n" + lastReceivedMessage);
+
+                        Message message = MessageParser.parse(lastReceivedMessage);
+
+                        connections.entrySet().stream()
+                                .filter(
+                                        entry ->
+                                                entry.getValue()
+                                                        .equals(message.getTargetUsername()))
+                                .findFirst()
+                                .ifPresent(
+                                        entry -> doSendMessage(message.getMsg(), entry.getKey()));
                     }
                 } catch (IOException e) {
                     closeClientConnection(connection);

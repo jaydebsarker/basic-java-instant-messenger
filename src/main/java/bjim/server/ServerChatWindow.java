@@ -9,6 +9,6 @@ public class ServerChatWindow extends AbstractChatWindow {
     }
 
     public ServerChatWindow(String username) {
-        super(username);
+        super(username, "Client");
     }
 }
