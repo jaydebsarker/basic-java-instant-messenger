@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.Value;
 
 public class Client {
 
@@ -24,12 +25,17 @@ public class Client {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    @Value(staticConstructor = "username")
+    public static class Username {
+        String username;
+    }
+
     public Client() {
         this(new ClientChatWindow());
     }
 
-    public Client(String userName, int id) {
-        this(new ClientChatWindow(userName));
+    public Client(Username userName) {
+        this(new ClientChatWindow(userName.username));
     }
 
     @SuppressWarnings("unused")
@@ -84,15 +90,6 @@ public class Client {
                 System.out.println("Failed to stop client...");
             }
         }
-    }
-
-    // using setUserName
-
-    public String set_and_get_UserName(String name) {
-        System.out.println(name);
-        String na = new AbstractChatWindownew(name).username;
-        // new ClientChatWindow(name);
-        return na;
     }
 
     public void sendMessage(String message) {
