@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import bjim.common.AbstractChatWindow;
+import bjim.common.AbstractChatWindownew;
 import bjim.server.Server;
 import bjim.server.ServerChatWindow;
 import java.io.IOException;
@@ -18,6 +20,9 @@ public class ClientTest {
 
     final ServerChatWindow serverChatWindow = mock(ServerChatWindow.class);
     final ClientChatWindow clientChatWindow = mock(ClientChatWindow.class);
+
+    //mock AbstractChatWindownew
+    final AbstractChatWindownew abstractChatWindownew= mock(AbstractChatWindownew.class);
 
     private Server server;
     private Client client;
