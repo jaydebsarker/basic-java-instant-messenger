@@ -2,7 +2,6 @@ package bjim.client;
 
 import static java.util.stream.Collectors.toSet;
 
-import bjim.common.*;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
