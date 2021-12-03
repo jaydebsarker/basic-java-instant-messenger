@@ -1,8 +1,8 @@
 package bjim.client;
 
-import bjim.common.*;
 import static java.util.stream.Collectors.toSet;
 
+import bjim.common.*;
 import bjim.common.Connection;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.text.BadLocationException;
+import lombok.Getter;
 import lombok.Value;
 
 public class Client {
