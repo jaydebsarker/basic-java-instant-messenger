@@ -265,7 +265,6 @@ public class AbstractChatWindow {
         panel_3.add(userInput);
         userInput.setColumns(10);
 
-
         JPanel statusPanel = new JPanel();
 
         statusPanel.setBounds(0, 520, 575, 30);
