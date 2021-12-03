@@ -142,6 +142,7 @@ public class Server {
                 setStatus("Waiting for clients to connect!");
                 ableToType(true);
 
+                //noinspection InfiniteLoopStatement
                 while (true) {
                     waitForConnection();
                 }

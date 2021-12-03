@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.Getter;
+import lombok.Value;
 
 public class Client {
 
@@ -20,7 +21,7 @@ public class Client {
 
     private final ClientChatWindow chatWindow;
     private final String serverIP;
-    private final int serverPort = SERVER_PORT; // todo: allow setting in constructor
+    private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
     private Connection connection;
 
     private String lastReceivedMessage = "";
@@ -30,18 +31,25 @@ public class Client {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public static Client withUsername(String username) {
-        return new Client(LOCAL_HOST, username);
+    @Value(staticConstructor = "username")
+    public static class Username {
+        String username;
     }
 
     public Client() {
         this(new ClientChatWindow());
     }
 
+    public Client(Username userName) {
+        this(new ClientChatWindow(userName.username));
+    }
+
+    @SuppressWarnings("unused")
     public Client(String serverIP) {
         this(serverIP, new ClientChatWindow());
     }
 
+    @SuppressWarnings("unused")
     public Client(String serverIP, String username) {
         this(serverIP, new ClientChatWindow(username));
     }

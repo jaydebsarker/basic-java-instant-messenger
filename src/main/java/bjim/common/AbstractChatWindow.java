@@ -20,7 +20,7 @@ public class AbstractChatWindow {
     protected final JFrame chatWindow;
     protected final JTextField userInput;
     protected final JTextArea chatText;
-    public JLabel status;
+    public final JLabel status;
 
     @Getter private final String username;
 

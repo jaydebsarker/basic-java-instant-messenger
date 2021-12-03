@@ -20,10 +20,6 @@ public class Connection {
         this.input = new ObjectInputStream(socket.getInputStream());
     }
 
-    public String getHostName() {
-        return socket.getInetAddress().getHostName();
-    }
-
     public void close() throws IOException {
         if (getOutput() != null) {
             getOutput().close();
