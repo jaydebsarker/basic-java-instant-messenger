@@ -15,6 +15,8 @@ import javax.swing.text.Style;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+
+import bjim.client.ClientChatWindow;
 import lombok.Getter;
 
 public class AbstractChatWindow {
@@ -239,7 +241,9 @@ public class AbstractChatWindow {
         statusPanel.add(status);
         contentPane.add(statusPanel);
 
-        chatFrame.setVisible(true);
+        if (this instanceof ClientChatWindow) {
+            chatFrame.setVisible(true);
+        }
     }
 
     public void setStatus(String statusText) {
@@ -270,7 +274,7 @@ public class AbstractChatWindow {
 
         final String text = "\n" + inputText;
 
-        int lastIndexOfNewLine = text.lastIndexOf(":\n");
+        int lastIndexOfNewLine = text.lastIndexOf(":\n") + 3;
         String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
 
         if (path != null) {
