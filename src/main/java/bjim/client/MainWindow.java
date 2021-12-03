@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import lombok.Getter;
 
-public class OnlineUsersWindow {
+public class MainWindow {
 
     private static final int FONT_SIZE = 18;
     private static final int WINDOW_WIDTH = 500;
@@ -22,7 +22,7 @@ public class OnlineUsersWindow {
 
     @Getter private final String username;
 
-    public OnlineUsersWindow(String username) {
+    public MainWindow(String username) {
 
         this.username = username;
 

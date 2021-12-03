@@ -27,7 +27,6 @@ public class Server {
     private final ServerChatWindow chatWindow;
 
     private final Map<Connection, String> connections = new ConcurrentHashMap<>();
-    String messageToSend;
 
     // checking last received message from client to server
     @Getter private String lastReceivedMessage = "";
@@ -60,21 +59,7 @@ public class Server {
 
     public synchronized void sendMessage(String message) {
 
-        if (message.equals(":D")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sm";
-        } else if (message.equals(":'(")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "cr";
-        } else if (message.equals("<3)")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "hr";
-        } else if (message.equals(":(")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sd";
-        } else if (message.equals("o.O")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "ag";
-        } else if (message.equals(":'D")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sc";
-        } else {
-            messageToSend = chatWindow.getUsername() + ":\n  " + message;
-        }
+        String messageToSend = chatWindow.getUsername() + ":\n  " + message;
 
         for (Connection connection : connections.keySet()) {
             try {

@@ -31,7 +31,7 @@ public class Client {
 
     @Getter private Set<String> onlineUsers;
 
-    private final OnlineUsersWindow onlineUsersWindow;
+    private final MainWindow mainWindow;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -66,7 +66,7 @@ public class Client {
         this.serverIP = serverIP;
         this.chatWindow = chatWindow;
         this.chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
-        this.onlineUsersWindow = new OnlineUsersWindow(chatWindow.getUsername());
+        this.mainWindow = new MainWindow(chatWindow.getUsername());
         //        this.onlineUsersWindow.onUsernameSelected(e -> {
         //
         //        });
@@ -98,22 +98,8 @@ public class Client {
 
     public void sendMessage(String message) {
 
-        String messageToSend;
-        if (message.equals(":D")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sm";
-        } else if (message.equals(":'(")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "cr";
-        } else if (message.equals("<3)")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "hr";
-        } else if (message.equals(":(")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sd";
-        } else if (message.equals("o.O")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "ag";
-        } else if (message.equals(":'D")) {
-            messageToSend = chatWindow.getUsername() + ":\n  " + "sc";
-        } else {
-            messageToSend = chatWindow.getUsername() + ":\n  " + message;
-        }
+        String messageToSend = chatWindow.getUsername() + ":\n  " + message;
+
         try {
             sendMessage(messageToSend, connection);
             showMessage("\n" + messageToSend);
@@ -221,6 +207,6 @@ public class Client {
     private void updateOnlineUsers() {
         String[] onlineUsersArray = lastReceivedMessage.split(":")[1].split(",");
         onlineUsers = Arrays.stream(onlineUsersArray).collect(toSet());
-        onlineUsersWindow.setOnlineUsersJList(onlineUsersArray);
+        mainWindow.setOnlineUsersJList(onlineUsersArray);
     }
 }

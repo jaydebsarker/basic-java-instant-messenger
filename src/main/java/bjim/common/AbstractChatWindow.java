@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
@@ -30,6 +32,17 @@ public class AbstractChatWindow {
     private ImageIcon image4;
     private HTMLEditorKit kit;
     public Style style;
+
+    private static final Map<String, String> EMOJIS = new HashMap<>();
+
+    static {
+        EMOJIS.put(":D", "image/emo.gif");
+        EMOJIS.put(":'(", "image/cry1.gif");
+        EMOJIS.put("<3)", "image/heart_eye.gif");
+        EMOJIS.put("o.O", "image/angry.gif");
+        EMOJIS.put(":(", "image/sad.gif");
+        EMOJIS.put(":'D", "image/smile_cry.gif");
+    }
 
     @Getter public String username;
 
@@ -66,6 +79,7 @@ public class AbstractChatWindow {
                 "body { font-family: " + FONT_NAME + "; " + "font-size: " + FONT_SIZE + "pt; }";
 
         pan = new JTextPane();
+        pan.setEditable(false);
         kit = new HTMLEditorKit();
         doc1 = new HTMLDocument();
         Font font1 = new Font("Serif", Font.ITALIC, 18);
@@ -246,138 +260,24 @@ public class AbstractChatWindow {
         return chatWindow.isVisible();
     }
 
-    public void showMessage(final String text) throws BadLocationException {
-        String lasttwodig = text.substring(text.length() - 2);
+    public void showMessage(final String text) {
 
-        if (lasttwodig.equals("sm")) {
-            String message = text.substring(0, text.length() - 2);
+        int lastIndexOfNewLine = text.lastIndexOf("\n");
+        String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
+
+        if (path != null) {
+            String message = text.substring(0, lastIndexOfNewLine + 2);
             invokeLater(
                     () -> {
                         try {
 
                             doc1.insertString(doc1.getLength(), message, style);
 
-                            String Path = "image/emo.gif";
                             kit.insertHTML(
                                     doc1,
                                     doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
-
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else if (lasttwodig.equals("cr")) {
-            String message = text.substring(0, text.length() - 2);
-            invokeLater(
-                    () -> {
-                        try {
-
-                            doc1.insertString(doc1.getLength(), message, style);
-
-                            String Path = "image/cry1.gif";
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
-
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else if (lasttwodig.equals("hr")) {
-            String message = text.substring(0, text.length() - 2);
-            invokeLater(
-                    () -> {
-                        try {
-
-                            doc1.insertString(doc1.getLength(), message, style);
-
-                            String Path = "image/heart_eye.gif";
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
-
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else if (lasttwodig.equals("sd")) {
-            String message = text.substring(0, text.length() - 2);
-            invokeLater(
-                    () -> {
-                        try {
-
-                            doc1.insertString(doc1.getLength(), message, style);
-
-                            String Path = "image/sad.gif";
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
-
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else if (lasttwodig.equals("ag")) {
-            String message = text.substring(0, text.length() - 2);
-            invokeLater(
-                    () -> {
-                        try {
-
-                            doc1.insertString(doc1.getLength(), message, style);
-
-                            String Path = "image/angry.gif";
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
-
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else if (lasttwodig.equals("sc")) {
-            String message = text.substring(0, text.length() - 2);
-            invokeLater(
-                    () -> {
-                        try {
-
-                            doc1.insertString(doc1.getLength(), message, style);
-
-                            String Path = "image/smile_cry.gif";
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:\\"
-                                            + Path
+                                    "<img src=\"file:"
+                                            + path
                                             + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
                                     0,
                                     0,
@@ -391,11 +291,7 @@ public class AbstractChatWindow {
             invokeLater(
                     () -> {
                         try {
-
                             doc1.insertString(doc1.getLength(), text, style);
-
-                            String Path = "image/emo.gif";
-
                         } catch (BadLocationException e) {
                             e.printStackTrace();
                         }
