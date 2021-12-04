@@ -32,6 +32,7 @@ public class AbstractChatWindow {
     private final JProgressBar progressBar;
     private final ImageIcon image4;
     private final HTMLEditorKit kit;
+    private final JButton  btnSendFile;
     public Style style;
 
     private static final Map<String, String> EMOJIS = new HashMap<>();
@@ -43,6 +44,9 @@ public class AbstractChatWindow {
         EMOJIS.put("o.O", "image/angry.gif");
         EMOJIS.put(":(", "image/sad.gif");
         EMOJIS.put(":'D", "image/smile_cry.gif");
+        EMOJIS.put("( ◕ᴗ◕✿ )", "image/rose.gif");
+        EMOJIS.put("(* ﾟ∀ﾟ)", "image/clapping.gif");
+        EMOJIS.put("(°ヘ°)", "image/confused.gif");
     }
 
     @Getter public final String username;
@@ -83,6 +87,7 @@ public class AbstractChatWindow {
 
         pan = new JTextPane();
         pan.setAutoscrolls(true);
+        pan.setMargin( new Insets(5,10,7,7) );
         pan.setEditable(false);
         kit = new HTMLEditorKit();
         doc1 = new HTMLDocument();
@@ -197,7 +202,7 @@ public class AbstractChatWindow {
         btnNewButton_7.setBounds(31 * 11, 22, 44, 41);
         btnNewButton_7.setBorder(new EmptyBorder(0, 0, 0, 0));
         btnNewButton_7.setContentAreaFilled(false);
-        btnNewButton_7.setText("\uD83C\uDFBC");
+
         panel_2.add(btnNewButton_7);
 
         btnNewButton_7.addActionListener(
@@ -209,6 +214,61 @@ public class AbstractChatWindow {
                         userInputAction();
                     }
                 });
+
+
+        ImageIcon flower = new ImageIcon("image/rose.png");
+        JButton btnNewButton_f = new JButton(flower);
+        btnNewButton_f.setBounds(31 * 13, 22, 44, 41);
+        btnNewButton_f.setBorder(new EmptyBorder(0, 0, 0, 0));
+        btnNewButton_f.setContentAreaFilled(false);
+
+        panel_2.add(btnNewButton_f);
+
+        btnNewButton_f.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        userInput.setText("( ◕ᴗ◕✿ )");
+                        userInputAction();
+                    }
+                });
+        ImageIcon clap = new ImageIcon("image/clapping.png");
+        JButton clapping= new JButton(clap);
+        clapping.setBounds(31 * 15, 22, 44, 41);
+        clapping.setBorder(new EmptyBorder(0, 0, 0, 0));
+        clapping.setContentAreaFilled(false);
+
+        panel_2.add(clapping);
+
+        clapping.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        userInput.setText("(* ﾟ∀ﾟ)");
+                        userInputAction();
+                    }
+                });
+        ImageIcon confused = new ImageIcon("image/confusing.png");
+        JButton confusion = new JButton(confused);
+        confusion.setBounds(31 * 17, 24, 32, 32);
+        confusion.setBorder(new EmptyBorder(0, 0, 0, 0));
+        confusion.setContentAreaFilled(false);
+
+        panel_2.add(confusion);
+
+        confusion.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        userInput.setText("(°ヘ°)");
+                        userInputAction();
+                    }
+                });
+
+
 
         progressBar = new JProgressBar();
         progressBar.setBounds(10, 22, 540, 41);
@@ -227,22 +287,22 @@ public class AbstractChatWindow {
         //        btnSend.setBounds(498, 5, 64, 64);
         //        panel_3.add(btnSend);
 
-        //        ImageIcon image9 = new ImageIcon("image/document.png");
-        //        btnSendFile = new JButton(image9);
-        //        btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
-        //        btnSendFile.setContentAreaFilled(false);
-        //        btnSendFile.setBounds(440, 10, 64, 53);
-        //        panel_3.add(btnSendFile);
+              ImageIcon image9 = new ImageIcon("image/document.png");
+               btnSendFile = new JButton(image9);
+              btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
+             btnSendFile.setContentAreaFilled(false);
+             btnSendFile.setBounds(510, 10, 64, 53);
+              panel_3.add(btnSendFile);
 
         userInput = new JTextField();
-        userInput.setBounds(0, 5, 433, 58);
+        userInput.setBounds(0, 5, 505, 58);
         panel_3.add(userInput);
         userInput.setColumns(10);
 
         JPanel statusPanel = new JPanel();
 
         statusPanel.setBounds(0, 520, 575, 30);
-        statusPanel.setBackground(Color.green);
+        statusPanel.setBackground(Color.lightGray);
 
         statusPanel.add(status);
         contentPane.add(statusPanel);
