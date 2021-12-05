@@ -7,9 +7,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
@@ -18,6 +23,7 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 public class AbstractChatWindow {
 
@@ -34,6 +40,14 @@ public class AbstractChatWindow {
     private final HTMLEditorKit kit;
     private final JButton  btnSendFile;
     public Style style;
+
+
+    static BufferedImage image ;
+  protected ByteArrayInputStream bis;
+    static File file;
+    static BufferedImage resized;
+
+
 
     private static final Map<String, String> EMOJIS = new HashMap<>();
 
@@ -55,6 +69,7 @@ public class AbstractChatWindow {
 
     public AbstractChatWindow(String username, String targetUser) {
 
+
         this.username = username;
         this.targetUser = targetUser;
 
@@ -65,7 +80,7 @@ public class AbstractChatWindow {
         chatFrame.setTitle(username + " - " + targetUser);
         chatFrame.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+       contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         chatFrame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
@@ -80,7 +95,7 @@ public class AbstractChatWindow {
         //        lblNewLabel.setBounds(20, 0, 66, 67);
         //        panel.add(lblNewLabel);
 
-        JPanel panel_6 = new JPanel();
+
 
         String bodyRule =
                 "body { font-family: " + FONT_NAME + "; " + "font-size: " + FONT_SIZE + "pt; }";
@@ -97,13 +112,16 @@ public class AbstractChatWindow {
         pan.setDocument(doc1);
         ((HTMLDocument) pan.getDocument()).getStyleSheet().addRule(bodyRule);
 
-        panel_6.setBounds(0, 66, 562, 323);
-        panel_6.setLayout(null);
+        JPanel panel_6 = new JPanel();
 
+        panel_6.setBounds(0, 66, 562, 323);
+        panel_6.setBackground(Color.red);
+        panel_6.setLayout(null);
         JScrollPane scrollPane = new JScrollPane(pan);
         scrollPane.setBounds(0, 0, 562, 323);
         panel_6.add(scrollPane);
         contentPane.add(panel_6);
+
 
         JPanel panel_2 = new JPanel();
         panel_2.setBounds(0, 372, 573, 73);
@@ -294,6 +312,39 @@ public class AbstractChatWindow {
              btnSendFile.setBounds(510, 10, 64, 53);
               panel_3.add(btnSendFile);
 
+
+        btnSendFile.addActionListener(new ActionListener() {
+            @SneakyThrows
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFileChooser jFileChooser = new JFileChooser();
+
+                jFileChooser.setDialogTitle("Choose a file to send.");
+
+                if (jFileChooser.showOpenDialog(null)  == JFileChooser.APPROVE_OPTION) {
+
+
+
+               file=jFileChooser.getSelectedFile();
+                    String fileName = file.getName();
+                    BufferedImage     targetImg = ImageIO.read(file);
+                  resized = resize(targetImg, 100, 300);
+                    userInput.setText(fileName );
+
+
+
+
+
+
+
+                }
+            }
+        });
+
+
+
+
         userInput = new JTextField();
         userInput.setBounds(0, 5, 505, 58);
         panel_3.add(userInput);
@@ -320,6 +371,20 @@ public class AbstractChatWindow {
             e.printStackTrace();
         }
     }
+    private static BufferedImage resize(BufferedImage img, int height, int width) {
+        int h= img.getHeight();
+
+        int w=img.getWidth();
+        if( w>300 && h>100 )
+        {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;}
+        else return img;
+    }
 
     public void setStatus(String statusText) {
         status.setText(statusText);
@@ -345,46 +410,80 @@ public class AbstractChatWindow {
         return chatFrame.isVisible();
     }
 
-    public void showMessage(String inputText) {
+    public void showMessage(String inputText) throws IOException {
 
         final String text = "\n\n" + inputText;
 
         int lastIndexOfNewLine = text.lastIndexOf(":\n") + 3;
         String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
+        System.out.println(text.substring(lastIndexOfNewLine).trim());
 
-        if (path != null) {
-            String message = text.substring(0, lastIndexOfNewLine + 2);
-            invokeLater(
-                    () -> {
-                        try {
 
-                            doc1.insertString(doc1.getLength(), message, style);
 
-                            kit.insertHTML(
-                                    doc1,
-                                    doc1.getLength(),
-                                    "<img src=\"file:"
-                                            + path
-                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                    0,
-                                    0,
-                                    HTML.Tag.IMG);
 
-                        } catch (BadLocationException | IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        } else {
-            invokeLater(
-                    () -> {
-                        try {
-                            doc1.insertString(doc1.getLength(), text, style);
-                        } catch (BadLocationException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        }
+
+            if (path != null) {
+                String message = text.substring(0, lastIndexOfNewLine + 2);
+                invokeLater(
+                        () -> {
+                            try {
+
+                                doc1.insertString(doc1.getLength(), message, style);
+
+                                kit.insertHTML(
+                                        doc1,
+                                        doc1.getLength(),
+                                        "<img src=\"file:"
+                                                + path
+                                                + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
+                                        0,
+                                        0,
+                                        HTML.Tag.IMG);
+
+                            } catch (BadLocationException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+            }
+
+            else {
+
+
+                String checkextensions = text.substring(text.length() - 4);
+
+
+
+                if (checkextensions.equals(".png")||checkextensions.equals(".jpg")) {
+                    String sendername = text.substring(0, lastIndexOfNewLine + 2);
+
+
+                    invokeLater(
+                            () -> {
+                                try {
+                                    doc1.insertString(doc1.getLength(), sendername, style);
+                                    doc1.insertString(doc1.getLength(), "", style);
+                                    pan.insertIcon(new ImageIcon(resized));
+                                } catch (BadLocationException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                } else {
+
+
+                    invokeLater(
+                            () -> {
+                                try {
+
+                                    doc1.insertString(doc1.getLength(), text, style);
+                                } catch (BadLocationException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                }
+            }
+
     }
+
 
     public void ableToType(final boolean tof) {
         invokeLater(() -> userInput.setEditable(tof));

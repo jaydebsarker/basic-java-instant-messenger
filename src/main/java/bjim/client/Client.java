@@ -109,11 +109,11 @@ public class Client {
         connection.getOutput().flush();
     }
 
-    private void showSentMessage(Message message) {
+    private void showSentMessage(Message message) throws IOException {
         mainWindow.showSentMessage(message);
     }
 
-    private void showReceivedMessage(String message) {
+    private void showReceivedMessage(String message) throws IOException {
         mainWindow.showReceivedMessage(message);
     }
 

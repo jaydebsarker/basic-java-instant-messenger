@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -100,12 +101,12 @@ public class MainWindow {
         mainFrame.setDefaultCloseOperation(defaultCloseOperation);
     }
 
-    public void showSentMessage(Message message) {
+    public void showSentMessage(Message message) throws IOException {
         ClientChatWindow clientChatWindow = getClientChatWindow(message.getTargetUsername());
         clientChatWindow.showMessage(message.getMsg());
     }
 
-    public void showReceivedMessage(String message) {
+    public void showReceivedMessage(String message) throws IOException {
         String from = message.substring(0, message.indexOf(":\n"));
         ClientChatWindow clientChatWindow = getClientChatWindow(from);
         clientChatWindow.showMessage(message);

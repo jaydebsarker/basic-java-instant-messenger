@@ -103,7 +103,7 @@ public class Server {
         }
     }
 
-    public synchronized void showMessage(String text) {
+    public synchronized void showMessage(String text) throws IOException {
         chatWindow.showMessage(text);
     }
 
