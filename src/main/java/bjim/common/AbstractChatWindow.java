@@ -9,11 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -40,12 +43,16 @@ public class AbstractChatWindow {
     private final HTMLEditorKit kit;
     private final JButton  btnSendFile;
     public Style style;
-
+    JFileChooser jFileChooser;
+    int check=0;
 
     static BufferedImage image ;
   protected ByteArrayInputStream bis;
-    static File file;
+  public File file;
     static BufferedImage resized;
+   static String getimagel;
+    BufferedImage imag1;
+
 
 
 
@@ -318,19 +325,29 @@ public class AbstractChatWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JFileChooser jFileChooser = new JFileChooser();
+              jFileChooser = new JFileChooser();
 
                 jFileChooser.setDialogTitle("Choose a file to send.");
 
                 if (jFileChooser.showOpenDialog(null)  == JFileChooser.APPROVE_OPTION) {
+                    ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
+                    file=jFileChooser.getSelectedFile();
+                    BufferedImage img=ImageIO.read(file);
+                    ImageIO.write(img, "jpg", baos);
+                    baos.flush();
+                    String base64String=Base64
+                            .getEncoder()
+                            .encodeToString(baos.toByteArray());
+
+                    getimagel=base64String;
+
+                    check=1;
 
 
 
-               file=jFileChooser.getSelectedFile();
-                    String fileName = file.getName();
-                    BufferedImage     targetImg = ImageIO.read(file);
-                  resized = resize(targetImg, 100, 300);
-                    userInput.setText(fileName );
+
+                    userInput.setText(base64String );
+                    userInputAction();
 
 
 
@@ -386,7 +403,15 @@ public class AbstractChatWindow {
         else return img;
     }
 
-    public void setStatus(String statusText) {
+    public static boolean IsBase64(String base64String) {
+        if (base64String.replace(" ", "").length() % 4 != 0) {
+            return false;}
+            else return true;
+        }
+
+
+
+        public void setStatus(String statusText) {
         status.setText(statusText);
     }
 
@@ -399,6 +424,7 @@ public class AbstractChatWindow {
                                     e.getID(),
                                     "to:" + getTargetUser() + ":\n  " + e.getActionCommand()));
                     userInput.setText("");
+                    check=0;
                 });
     }
 
@@ -450,25 +476,59 @@ public class AbstractChatWindow {
 
 
                 String checkextensions = text.substring(text.length() - 4);
+                 String encodedstring=text.substring(lastIndexOfNewLine).trim();
+
+                String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(encodedstring);
+                if(m.find()) {
+
+                    byte[] decodedBytes = Base64
+                            .getDecoder()
+                            .decode(encodedstring);
+                    BufferedImage imag1 = ImageIO.read(new ByteArrayInputStream(decodedBytes));
+                    System.out.println(imag1);
 
 
+                    if (imag1 == null) {
 
-                if (checkextensions.equals(".png")||checkextensions.equals(".jpg")) {
-                    String sendername = text.substring(0, lastIndexOfNewLine + 2);
+                        invokeLater(
+                                () -> {
+                                    try {
+
+                                        doc1.insertString(doc1.getLength(), text, style);
+                                    } catch (BadLocationException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
 
 
-                    invokeLater(
-                            () -> {
-                                try {
-                                    doc1.insertString(doc1.getLength(), sendername, style);
-                                    doc1.insertString(doc1.getLength(), "", style);
-                                    pan.insertIcon(new ImageIcon(resized));
-                                } catch (BadLocationException e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                } else {
+                    } else {
 
+
+                        String sendername = text.substring(0, lastIndexOfNewLine + 2);
+
+
+                        invokeLater(
+                                () -> {
+                                    try {
+
+
+                                        resized = resize(imag1, 100, 300);
+                                        doc1.insertString(doc1.getLength(), sendername, style);
+                                        doc1.insertString(doc1.getLength(), "", style);
+                                        pan.insertIcon(new ImageIcon(resized));
+                                    } catch (BadLocationException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+
+
+                    }
+                }
+
+                else
+                {
 
                     invokeLater(
                             () -> {
@@ -479,7 +539,21 @@ public class AbstractChatWindow {
                                     e.printStackTrace();
                                 }
                             });
+
+
                 }
+
+
+
+
+
+
+
+
+
+
+
+
             }
 
     }
