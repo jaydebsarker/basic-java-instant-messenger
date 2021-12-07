@@ -7,9 +7,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
@@ -18,6 +23,10 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import lombok.Getter;
+import lombok.SneakyThrows;
+
+
+
 
 public class AbstractChatWindow {
 
@@ -33,8 +42,9 @@ public class AbstractChatWindow {
     private final ImageIcon image4;
     private final HTMLEditorKit kit;
     public Style style;
-
+    static String getimagel;
     private static final Map<String, String> EMOJIS = new HashMap<>();
+
 
     static {
         EMOJIS.put(":D", "image/emo.gif");
@@ -75,6 +85,16 @@ public class AbstractChatWindow {
         //        JLabel lblNewLabel = new JLabel(image2);
         //        lblNewLabel.setBounds(20, 0, 66, 67);
         //        panel.add(lblNewLabel);
+
+
+
+        JPanel panel_profile_upload=new JPanel();
+
+        JButton profile_pic_upload=new JButton("Upload Profile Photo");
+        profile_pic_upload.setBounds(400,10,150,40);
+        contentPane.add(profile_pic_upload);
+
+
 
         JPanel panel_6 = new JPanel();
 
