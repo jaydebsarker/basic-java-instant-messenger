@@ -41,20 +41,17 @@ public class AbstractChatWindow {
     private final JProgressBar progressBar;
     private final ImageIcon image4;
     private final HTMLEditorKit kit;
-    private final JButton  btnSendFile;
+    private final JButton btnSendFile;
     public Style style;
     JFileChooser jFileChooser;
-    int check=0;
+    int check = 0;
 
-    static BufferedImage image ;
-  protected ByteArrayInputStream bis;
-  public File file;
+    static BufferedImage image;
+    protected ByteArrayInputStream bis;
+    public File file;
     static BufferedImage resized;
-   static String getimagel;
+    static String getimagel;
     BufferedImage imag1;
-
-
-
 
     private static final Map<String, String> EMOJIS = new HashMap<>();
 
@@ -76,7 +73,6 @@ public class AbstractChatWindow {
 
     public AbstractChatWindow(String username, String targetUser) {
 
-
         this.username = username;
         this.targetUser = targetUser;
 
@@ -87,7 +83,7 @@ public class AbstractChatWindow {
         chatFrame.setTitle(username + " - " + targetUser);
         chatFrame.setBounds(100, 100, 576, 595);
         contentPane = new JPanel();
-       contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         chatFrame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
@@ -102,14 +98,12 @@ public class AbstractChatWindow {
         //        lblNewLabel.setBounds(20, 0, 66, 67);
         //        panel.add(lblNewLabel);
 
-
-
         String bodyRule =
                 "body { font-family: " + FONT_NAME + "; " + "font-size: " + FONT_SIZE + "pt; }";
 
         pan = new JTextPane();
         pan.setAutoscrolls(true);
-        pan.setMargin( new Insets(5,10,7,7) );
+        pan.setMargin(new Insets(5, 10, 7, 7));
         pan.setEditable(false);
         kit = new HTMLEditorKit();
         doc1 = new HTMLDocument();
@@ -128,7 +122,6 @@ public class AbstractChatWindow {
         scrollPane.setBounds(0, 0, 562, 323);
         panel_6.add(scrollPane);
         contentPane.add(panel_6);
-
 
         JPanel panel_2 = new JPanel();
         panel_2.setBounds(0, 372, 573, 73);
@@ -240,7 +233,6 @@ public class AbstractChatWindow {
                     }
                 });
 
-
         ImageIcon flower = new ImageIcon("image/rose.png");
         JButton btnNewButton_f = new JButton(flower);
         btnNewButton_f.setBounds(31 * 13, 22, 44, 41);
@@ -259,7 +251,7 @@ public class AbstractChatWindow {
                     }
                 });
         ImageIcon clap = new ImageIcon("image/clapping.png");
-        JButton clapping= new JButton(clap);
+        JButton clapping = new JButton(clap);
         clapping.setBounds(31 * 15, 22, 44, 41);
         clapping.setBorder(new EmptyBorder(0, 0, 0, 0));
         clapping.setContentAreaFilled(false);
@@ -293,8 +285,6 @@ public class AbstractChatWindow {
                     }
                 });
 
-
-
         progressBar = new JProgressBar();
         progressBar.setBounds(10, 22, 540, 41);
         progressBar.setVisible(false);
@@ -312,55 +302,41 @@ public class AbstractChatWindow {
         //        btnSend.setBounds(498, 5, 64, 64);
         //        panel_3.add(btnSend);
 
-              ImageIcon image9 = new ImageIcon("image/document.png");
-               btnSendFile = new JButton(image9);
-              btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
-             btnSendFile.setContentAreaFilled(false);
-             btnSendFile.setBounds(510, 10, 64, 53);
-              panel_3.add(btnSendFile);
+        ImageIcon image9 = new ImageIcon("image/document.png");
+        btnSendFile = new JButton(image9);
+        btnSendFile.setBorder(new EmptyBorder(0, 0, 0, 0));
+        btnSendFile.setContentAreaFilled(false);
+        btnSendFile.setBounds(510, 10, 64, 53);
+        panel_3.add(btnSendFile);
 
+        btnSendFile.addActionListener(
+                new ActionListener() {
+                    @SneakyThrows
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
 
-        btnSendFile.addActionListener(new ActionListener() {
-            @SneakyThrows
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                        jFileChooser = new JFileChooser();
 
-              jFileChooser = new JFileChooser();
+                        jFileChooser.setDialogTitle("Choose a file to send.");
 
-                jFileChooser.setDialogTitle("Choose a file to send.");
+                        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
+                            file = jFileChooser.getSelectedFile();
+                            BufferedImage img = ImageIO.read(file);
+                            ImageIO.write(img, "jpg", baos);
+                            baos.flush();
+                            String base64String =
+                                    Base64.getEncoder().encodeToString(baos.toByteArray());
 
-                if (jFileChooser.showOpenDialog(null)  == JFileChooser.APPROVE_OPTION) {
-                    ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
-                    file=jFileChooser.getSelectedFile();
-                    BufferedImage img=ImageIO.read(file);
-                    ImageIO.write(img, "jpg", baos);
-                    baos.flush();
-                    String base64String=Base64
-                            .getEncoder()
-                            .encodeToString(baos.toByteArray());
+                            getimagel = base64String;
 
-                    getimagel=base64String;
+                            check = 1;
 
-                    check=1;
-
-
-
-
-                    userInput.setText(base64String );
-                    userInputAction();
-
-
-
-
-
-
-
-                }
-            }
-        });
-
-
-
+                            userInput.setText(base64String);
+                            userInputAction();
+                        }
+                    }
+                });
 
         userInput = new JTextField();
         userInput.setBounds(0, 5, 505, 58);
@@ -388,30 +364,28 @@ public class AbstractChatWindow {
             e.printStackTrace();
         }
     }
-    private static BufferedImage resize(BufferedImage img, int height, int width) {
-        int h= img.getHeight();
 
-        int w=img.getWidth();
-        if( w>300 && h>100 )
-        {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-        return resized;}
-        else return img;
+    private static BufferedImage resize(BufferedImage img, int height, int width) {
+        int h = img.getHeight();
+
+        int w = img.getWidth();
+        if (w > 300 && h > 100) {
+            Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = resized.createGraphics();
+            g2d.drawImage(tmp, 0, 0, null);
+            g2d.dispose();
+            return resized;
+        } else return img;
     }
 
     public static boolean IsBase64(String base64String) {
         if (base64String.replace(" ", "").length() % 4 != 0) {
-            return false;}
-            else return true;
-        }
+            return false;
+        } else return true;
+    }
 
-
-
-        public void setStatus(String statusText) {
+    public void setStatus(String statusText) {
         status.setText(statusText);
     }
 
@@ -424,7 +398,7 @@ public class AbstractChatWindow {
                                     e.getID(),
                                     "to:" + getTargetUser() + ":\n  " + e.getActionCommand()));
                     userInput.setText("");
-                    check=0;
+                    check = 0;
                 });
     }
 
@@ -444,91 +418,44 @@ public class AbstractChatWindow {
         String path = EMOJIS.get(text.substring(lastIndexOfNewLine).trim());
         System.out.println(text.substring(lastIndexOfNewLine).trim());
 
+        if (path != null) {
+            String message = text.substring(0, lastIndexOfNewLine + 2);
+            invokeLater(
+                    () -> {
+                        try {
 
+                            doc1.insertString(doc1.getLength(), message, style);
 
+                            kit.insertHTML(
+                                    doc1,
+                                    doc1.getLength(),
+                                    "<img src=\"file:"
+                                            + path
+                                            + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
+                                    0,
+                                    0,
+                                    HTML.Tag.IMG);
 
+                        } catch (BadLocationException | IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } else {
 
-            if (path != null) {
-                String message = text.substring(0, lastIndexOfNewLine + 2);
-                invokeLater(
-                        () -> {
-                            try {
+            String checkextensions = text.substring(text.length() - 4);
+            String encodedstring = text.substring(lastIndexOfNewLine).trim();
 
-                                doc1.insertString(doc1.getLength(), message, style);
+            String pattern =
+                    "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(encodedstring);
+            if (m.find()) {
 
-                                kit.insertHTML(
-                                        doc1,
-                                        doc1.getLength(),
-                                        "<img src=\"file:"
-                                                + path
-                                                + "\" alt=\"some_text\" width=\"100\" height=\"100\">",
-                                        0,
-                                        0,
-                                        HTML.Tag.IMG);
+                byte[] decodedBytes = Base64.getDecoder().decode(encodedstring);
+                BufferedImage imag1 = ImageIO.read(new ByteArrayInputStream(decodedBytes));
+                System.out.println(imag1);
 
-                            } catch (BadLocationException | IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-            }
-
-            else {
-
-
-                String checkextensions = text.substring(text.length() - 4);
-                 String encodedstring=text.substring(lastIndexOfNewLine).trim();
-
-                String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-                Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(encodedstring);
-                if(m.find()) {
-
-                    byte[] decodedBytes = Base64
-                            .getDecoder()
-                            .decode(encodedstring);
-                    BufferedImage imag1 = ImageIO.read(new ByteArrayInputStream(decodedBytes));
-                    System.out.println(imag1);
-
-
-                    if (imag1 == null) {
-
-                        invokeLater(
-                                () -> {
-                                    try {
-
-                                        doc1.insertString(doc1.getLength(), text, style);
-                                    } catch (BadLocationException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
-
-
-                    } else {
-
-
-                        String sendername = text.substring(0, lastIndexOfNewLine + 2);
-
-
-                        invokeLater(
-                                () -> {
-                                    try {
-
-
-                                        resized = resize(imag1, 100, 300);
-                                        doc1.insertString(doc1.getLength(), sendername, style);
-                                        doc1.insertString(doc1.getLength(), "", style);
-                                        pan.insertIcon(new ImageIcon(resized));
-                                    } catch (BadLocationException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
-
-
-                    }
-                }
-
-                else
-                {
+                if (imag1 == null) {
 
                     invokeLater(
                             () -> {
@@ -540,24 +467,37 @@ public class AbstractChatWindow {
                                 }
                             });
 
+                } else {
 
+                    String sendername = text.substring(0, lastIndexOfNewLine + 2);
+
+                    invokeLater(
+                            () -> {
+                                try {
+
+                                    resized = resize(imag1, 100, 300);
+                                    doc1.insertString(doc1.getLength(), sendername, style);
+                                    doc1.insertString(doc1.getLength(), "", style);
+                                    pan.insertIcon(new ImageIcon(resized));
+                                } catch (BadLocationException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                 }
+            } else {
 
+                invokeLater(
+                        () -> {
+                            try {
 
-
-
-
-
-
-
-
-
-
-
+                                doc1.insertString(doc1.getLength(), text, style);
+                            } catch (BadLocationException e) {
+                                e.printStackTrace();
+                            }
+                        });
             }
-
+        }
     }
-
 
     public void ableToType(final boolean tof) {
         invokeLater(() -> userInput.setEditable(tof));
