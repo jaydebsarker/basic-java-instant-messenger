@@ -11,34 +11,34 @@ public class UsernameWindow {
 
     private final JTextField usernameTextField = new JTextField();
 
-    private final JButton enterServer = new JButton("LOGIN");
+    private final JButton enterServer = new JButton("Start Chat");
 
     public UsernameWindow() {
 
-        usernameFrame.setBounds(100, 100, 576, 595);
+        usernameFrame.setBounds(100, 100, 450, 595);
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         usernameFrame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewUserRegister = new JLabel("User Login");
-        lblNewUserRegister.setFont(new Font("Times New Roman", Font.BOLD, 40));
-        lblNewUserRegister.setBounds(220, 80, 200, 45);
+        JLabel lblNewUserRegister = new JLabel("Enter your username, please");
+        lblNewUserRegister.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        lblNewUserRegister.setBounds(20, 80, 400, 45);
         contentPane.add(lblNewUserRegister);
 
         JLabel lblName = new JLabel("Username");
-        lblName.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblName.setBounds(105, 160, 150, 35);
+        lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblName.setBounds(20, 170, 150, 35);
         contentPane.add(lblName);
 
-        usernameTextField.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        usernameTextField.setBounds(220, 160, 228, 50);
+        usernameTextField.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        usernameTextField.setBounds(120, 160, 228, 50);
         contentPane.add(usernameTextField);
         usernameTextField.setColumns(10);
 
-        enterServer.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        enterServer.setBounds(220, 235, 228, 32);
+        enterServer.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        enterServer.setBounds(120, 235, 228, 40);
         contentPane.add(enterServer);
 
         usernameFrame.setVisible(true);
