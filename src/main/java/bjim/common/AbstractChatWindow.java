@@ -67,6 +67,7 @@ public class AbstractChatWindow {
     @Getter public final String username;
 
     @Getter public final String targetUser;
+    private ActionListener actionListener;
 
     public AbstractChatWindow(String username, String targetUser) {
 
@@ -335,8 +336,13 @@ public class AbstractChatWindow {
 
                             check = 1;
 
-                            userInput.setText(base64String);
-                            userInputAction();
+                            ActionEvent newEvent =
+                                    new ActionEvent(
+                                            e.getSource(),
+                                            e.getID(),
+                                            "to:" + getTargetUser() + ":\n  " + base64String);
+
+                            actionListener.actionPerformed(newEvent);
                         }
                     }
                 });
@@ -393,13 +399,15 @@ public class AbstractChatWindow {
     }
 
     public void onSend(ActionListener actionListener) {
+        this.actionListener = actionListener;
         userInput.addActionListener(
                 e -> {
-                    actionListener.actionPerformed(
+                    ActionEvent newEvent =
                             new ActionEvent(
                                     e.getSource(),
                                     e.getID(),
-                                    "to:" + getTargetUser() + ":\n  " + e.getActionCommand()));
+                                    "to:" + getTargetUser() + ":\n  " + e.getActionCommand());
+                    actionListener.actionPerformed(newEvent);
                     userInput.setText("");
                     check = 0;
                 });
