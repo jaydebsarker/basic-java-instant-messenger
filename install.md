@@ -1,7 +1,7 @@
 
 # Guide to install the server and client
 
-### How to build the Basic-Java-Instant-Messenger Application?
+### How to build the Basic-Java-Instant-Messenger source code?
 - Make sure you have Maven Java 15 or later on the machine where you want to build the source code
 - Build the source code using the following command:
   - `mvn clean install -U`
