@@ -40,6 +40,7 @@ public class MainWindow {
         mainFrame.setLayout(new BorderLayout());
 
         onlineUsersLabel = new JLabel();
+        onlineUsersLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
         onlineUsersLabel.setText("\tOnline Users");
         mainFrame.add(onlineUsersLabel, NORTH);
 

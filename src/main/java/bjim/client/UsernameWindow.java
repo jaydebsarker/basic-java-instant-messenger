@@ -28,17 +28,17 @@ public class UsernameWindow {
         contentPane.add(lblNewUserRegister);
 
         JLabel lblName = new JLabel("Username");
-        lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblName.setFont(new Font("Tahoma", Font.PLAIN, 28));
         lblName.setBounds(20, 170, 150, 35);
         contentPane.add(lblName);
 
         usernameTextField.setFont(new Font("Tahoma", Font.PLAIN, 28));
-        usernameTextField.setBounds(120, 160, 228, 50);
+        usernameTextField.setBounds(150, 160, 228, 50);
         contentPane.add(usernameTextField);
         usernameTextField.setColumns(10);
 
         enterServer.setFont(new Font("Tahoma", Font.PLAIN, 28));
-        enterServer.setBounds(120, 235, 228, 40);
+        enterServer.setBounds(150, 235, 228, 40);
         contentPane.add(enterServer);
 
         usernameFrame.setVisible(true);
