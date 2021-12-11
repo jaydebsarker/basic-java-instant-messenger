@@ -1,5 +1,6 @@
 What is Basic Java Instant Messenger ?
 ---------
+Java Instant Messenger
 A Java application based on GUI and Sockets+Streams, made as a college mini-project.
 
 How to run IM:
