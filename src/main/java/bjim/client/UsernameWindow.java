@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 public class UsernameWindow {
 
-    JFrame usernameFrame = new JFrame("Specify your username");
+    JFrame usernameFrame = new JFrame("Login to Instant Messenger");
 
     private final JTextField usernameTextField = new JTextField();
 
@@ -15,30 +15,30 @@ public class UsernameWindow {
 
     public UsernameWindow() {
 
-        usernameFrame.setBounds(450, 190, 1014, 597);
+        usernameFrame.setBounds(100, 100, 450, 595);
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         usernameFrame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewUserRegister = new JLabel("Welcome!!!");
-        lblNewUserRegister.setFont(new Font("Times New Roman", Font.BOLD, 42));
-        lblNewUserRegister.setBounds(362, 52, 325, 50);
+        JLabel lblNewUserRegister = new JLabel("Enter your username, please");
+        lblNewUserRegister.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        lblNewUserRegister.setBounds(20, 80, 400, 45);
         contentPane.add(lblNewUserRegister);
 
-        JLabel lblName = new JLabel("Enter your name");
-        lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblName.setBounds(362, 152, 150, 43);
+        JLabel lblName = new JLabel("Username");
+        lblName.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        lblName.setBounds(20, 170, 150, 35);
         contentPane.add(lblName);
 
-        usernameTextField.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        usernameTextField.setBounds(362, 230, 228, 50);
+        usernameTextField.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        usernameTextField.setBounds(150, 160, 228, 50);
         contentPane.add(usernameTextField);
         usernameTextField.setColumns(10);
 
-        enterServer.setFont(new Font("Tahoma", Font.PLAIN, 22));
-        enterServer.setBounds(362, 350, 259, 74);
+        enterServer.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        enterServer.setBounds(150, 235, 228, 40);
         contentPane.add(enterServer);
 
         usernameFrame.setVisible(true);

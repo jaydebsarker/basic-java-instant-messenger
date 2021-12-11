@@ -1,6 +1,8 @@
 package bjim.server;
 
 import bjim.common.Connection;
+import bjim.common.MessageParser;
+import bjim.common.MessageParser.Message;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @RequiredArgsConstructor
 public class Server {
@@ -50,10 +53,6 @@ public class Server {
         return chatWindow.isVisible();
     }
 
-    public boolean isServerMessageVisible() {
-        return chatWindow.isUserMessageVisible();
-    }
-
     public void startRunning() {
         chatWindow.onSend(event -> sendMessage(event.getActionCommand()));
         serverThreadPool.submit(new StartServer());
@@ -64,12 +63,7 @@ public class Server {
         String messageToSend = chatWindow.getUsername() + ":\n  " + message;
 
         for (Connection connection : connections.keySet()) {
-            try {
-                sendMessage(messageToSend, connection);
-                showMessage("\n" + messageToSend);
-            } catch (IOException ioException) {
-                chatWindow.append("\nERROR: Can't send that message");
-            }
+            doSendMessage(messageToSend, connection);
         }
     }
 
@@ -78,8 +72,17 @@ public class Server {
             try {
                 sendMessage(message, connection);
             } catch (IOException ioException) {
-                chatWindow.append("\nERROR: Can't broadcast control message");
+                chatWindow.setStatus("Failed to broadcast control message");
             }
+        }
+    }
+
+    private void doSendMessage(String messageToSend, Connection connection) {
+        try {
+            sendMessage(messageToSend, connection);
+            showMessage(messageToSend);
+        } catch (IOException ioException) {
+            chatWindow.setStatus("Failed to send message");
         }
     }
 
@@ -100,7 +103,7 @@ public class Server {
         }
     }
 
-    public synchronized void showMessage(String text) {
+    public synchronized void showMessage(String text) throws IOException {
         chatWindow.showMessage(text);
     }
 
@@ -135,6 +138,7 @@ public class Server {
 
     private class StartServer implements Runnable {
 
+        @SneakyThrows
         @Override
         public void run() {
             try {
@@ -165,7 +169,7 @@ public class Server {
         }
 
         private void disconnectClients() {
-            showMessage("\nClosing connections\n");
+            setStatus("Closing connections");
             ableToType(false);
 
             for (Connection connection : connections.keySet()) {
@@ -184,7 +188,20 @@ public class Server {
                         String username = lastReceivedMessage.split(":")[1];
                         addConnection(connection, username);
                     } else {
-                        showMessage("\n" + lastReceivedMessage);
+
+                        Message message = MessageParser.parse(lastReceivedMessage);
+
+                        if (message.isSelfMessage()) {
+                            continue;
+                        }
+                        connections.entrySet().stream()
+                                .filter(
+                                        entry ->
+                                                entry.getValue()
+                                                        .equals(message.getTargetUsername()))
+                                .findFirst()
+                                .ifPresent(
+                                        entry -> doSendMessage(message.getMsg(), entry.getKey()));
                     }
                 } catch (IOException e) {
                     closeClientConnection(connection);

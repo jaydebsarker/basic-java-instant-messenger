@@ -9,15 +9,6 @@ public class ServerChatWindow extends AbstractChatWindow {
     }
 
     public ServerChatWindow(String username) {
-        super(username);
-    }
-
-    public boolean isUserMessageVisible() {
-        return userInput.isVisible();
-    }
-
-    public boolean abletowrite() {
-        userInput.setEditable(false);
-        return userInput.isEditable();
+        super(username, "Client");
     }
 }

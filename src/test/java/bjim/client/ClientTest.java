@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import bjim.common.AbstractChatWindownew;
+import bjim.client.Client.Username;
 import bjim.server.Server;
 import bjim.server.ServerChatWindow;
 import java.util.ArrayList;
@@ -19,11 +19,6 @@ public class ClientTest {
     private static final int WAIT_SECS = 1000;
 
     final ServerChatWindow serverChatWindow = mock(ServerChatWindow.class);
-    final ClientChatWindow clientChatWindow = mock(ClientChatWindow.class);
-    final ClientChatWindow clientChatWindow2 = mock(ClientChatWindow.class);
-
-    // mock AbstractChatWindownew
-    final AbstractChatWindownew abstractChatWindownew = mock(AbstractChatWindownew.class);
 
     private Server server;
     private Client client;
@@ -33,8 +28,7 @@ public class ClientTest {
         server = new Server(serverChatWindow);
         server.startRunning();
         Thread.sleep(WAIT_SECS);
-        client = new Client(clientChatWindow);
-        when(clientChatWindow.getUsername()).thenReturn("Client");
+        client = new Client();
         when(serverChatWindow.getUsername()).thenReturn("Server");
     }
 
@@ -69,21 +63,6 @@ public class ClientTest {
     }
 
     @Test
-    public void windowIsVisibleDuringStartTheClient() throws InterruptedException {
-
-        // given
-        when(clientChatWindow.isVisible()).thenReturn(true);
-        client.startRunning();
-        Thread.sleep(WAIT_SECS);
-
-        // when...then
-        assertTrue(client.isWindowVisibleClientSide());
-
-        // after
-        client.stopRunning();
-    }
-
-    @Test
     public void serverSendsAMessageAndClientReceivesIt() throws InterruptedException {
 
         // given
@@ -109,11 +88,11 @@ public class ClientTest {
         Thread.sleep(WAIT_SECS);
 
         // when
-        client.sendMessage("hi");
+        client.sendMessage("to:Server:\n  hi");
         Thread.sleep(WAIT_SECS);
 
         // then
-        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+        assertEquals("Client:\n  to:Server:\n  hi", server.getLastReceivedMessage());
 
         // after
         client.stopRunning();
@@ -123,8 +102,8 @@ public class ClientTest {
     public void multipleClientsConnected() throws InterruptedException {
 
         // given
-        Client client1 = new Client(clientChatWindow);
-        Client client2 = new Client(clientChatWindow);
+        Client client1 = new Client();
+        Client client2 = new Client();
 
         // when
         client1.startRunning();
@@ -159,11 +138,8 @@ public class ClientTest {
     @Test
     public void twoClientsReceiveAListOfOnlineUsers() throws InterruptedException {
 
-        // given
-        when(clientChatWindow2.getUsername()).thenReturn("Client2");
-
-        Client client1 = new Client(clientChatWindow);
-        Client client2 = new Client(clientChatWindow2);
+        Client client1 = new Client(Username.username("Client"));
+        Client client2 = new Client(Username.username("Client2"));
 
         // when
         client1.startRunning();
@@ -189,11 +165,8 @@ public class ClientTest {
     @Test
     public void oneReceiveAListOfOnlineUsersAfterAnotherDisconnects() throws InterruptedException {
 
-        // given
-        when(clientChatWindow2.getUsername()).thenReturn("Client2");
-
-        Client client1 = new Client(clientChatWindow);
-        Client client2 = new Client(clientChatWindow2);
+        Client client1 = new Client(Username.username("Client"));
+        Client client2 = new Client(Username.username("Client2"));
 
         // when
         client1.startRunning();
@@ -226,8 +199,8 @@ public class ClientTest {
     public void twoClientsSendMessagesToServer() throws InterruptedException {
 
         // given
-        Client client1 = new Client(clientChatWindow);
-        Client client2 = new Client(clientChatWindow);
+        Client client1 = new Client(Username.username("Client"));
+        Client client2 = new Client(Username.username("Client2"));
 
         client1.startRunning();
         Thread.sleep(WAIT_SECS);
@@ -236,13 +209,13 @@ public class ClientTest {
         Thread.sleep(WAIT_SECS);
 
         // when...then
-        client1.sendMessage("hi");
+        client1.sendMessage("to:Server:\n  hi");
         Thread.sleep(WAIT_SECS);
-        assertEquals("Client:\n  hi", server.getLastReceivedMessage());
+        assertEquals("Client:\n  to:Server:\n  hi", server.getLastReceivedMessage());
 
-        client2.sendMessage("hello");
+        client2.sendMessage("to:Server:\n  hello");
         Thread.sleep(WAIT_SECS);
-        assertEquals("Client:\n  hello", server.getLastReceivedMessage());
+        assertEquals("Client2:\n  to:Server:\n  hello", server.getLastReceivedMessage());
 
         // after
         client1.stopRunning();
@@ -253,8 +226,8 @@ public class ClientTest {
     public void serverSendsMessagesToTwoClients() throws InterruptedException {
 
         // given
-        Client client1 = new Client(clientChatWindow);
-        Client client2 = new Client(clientChatWindow);
+        Client client1 = new Client();
+        Client client2 = new Client();
         client1.startRunning();
         client2.startRunning();
         Thread.sleep(WAIT_SECS);
