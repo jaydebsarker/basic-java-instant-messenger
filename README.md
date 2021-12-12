@@ -6,6 +6,7 @@ A Java application based on GUI and Sockets+Streams where multiple clients can c
 This application has been developed from: https://github.com/haxxorsid/basic-java-instant-messenger repository. 
 
 **Introduction**
+
 In this application, the server is working as a headless serever. For client side, an user can start chat using her 
 username. 
 
