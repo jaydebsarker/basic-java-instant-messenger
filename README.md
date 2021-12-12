@@ -30,7 +30,7 @@ Moreover, an user can do self chat with herself.
 If any user wants to log out, then she need to close her logged in frame and she will be removed from the list of online users also. 
 
 
-***Emjois**
+**Emjois**
 
 One can send emojis to another user. In this application, user can send any of the emojis from 8 types. She can select the emojis as .gif
 also selecting from chat frame. Another way to send emojis is to type the encoding text of that specific emojis. 
