@@ -22,7 +22,6 @@ After logged in the chatting, an user can see how many users are online from her
 
 **User Selection**
 
-
 User can select to whom chat with. If an user sends a message to another selected user, the chat window of that user 
 will be automatically opened. Both user can chat with each other. If the user closes her chat window, the messages will be saved. 
 Moreover, an user can do self chat with herself. 
