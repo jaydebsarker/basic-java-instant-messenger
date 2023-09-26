@@ -17,7 +17,7 @@ import lombok.Value;
 
 public class Client {
 
-    private static final int SERVER_PORT = 6789;
+    private static final int SERVER_PORT = 67;
     private static final int serverPort = SERVER_PORT; // todo: allow setting in constructor
     public static final String LOCAL_HOST = "127.0.0.1";
     private static final String CONNECTION_CLOSED = "Connection closed";
