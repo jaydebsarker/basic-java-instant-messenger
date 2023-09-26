@@ -25,6 +25,8 @@ public class Client {
     private final String serverIP;
     private Connection connection;
 
+    private connection_button;
+
     private String lastReceivedMessage = "";
 
     @Getter private Set<String> onlineUsers;
